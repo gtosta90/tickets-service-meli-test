@@ -6,7 +6,6 @@ from src.core.ticket.domain.ticket import Ticket
 from src.core.ticket.domain.value_objects import Status, Level
 
 
-
 class TestTicket:
     def test_title_is_required(self):
         with pytest.raises(

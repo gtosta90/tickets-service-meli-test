@@ -60,13 +60,3 @@ class Ticket():
         self.updated_at = datetime.datetime.now()
 
         self.validate()
-
-    def activate(self):
-        self.is_active = True
-
-        self.validate()
-
-    def deactivate(self):
-        self.is_active = False
-
-        self.validate()

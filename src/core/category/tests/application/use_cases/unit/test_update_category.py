@@ -30,12 +30,12 @@ class TestUpdateCategory:
         use_case = UpdateCategory(mock_repository)
         use_case.execute(UpdateCategoryRequest(
             id=category.id,
-            name=category.name,
-            display_name=category.display_name,
+            name="KITS1",
+            display_name="KITS1",
         ))
 
-        assert category.name == "KITS"
-        assert category.display_name == "KITS"
+        assert category.name == "KITS1"
+        assert category.display_name == "KITS1"
         mock_repository.update.assert_called_once_with(category)
 
     def test_update_category_relationship(

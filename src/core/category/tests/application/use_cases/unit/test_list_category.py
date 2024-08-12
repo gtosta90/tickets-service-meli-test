@@ -104,7 +104,6 @@ class TestListCategories:
                     is_active=category_2.is_active,
                     subcategories=[]
                 )
-                # link_air vem antes, "empurra" o link_used para fora da página
             ],
             meta=ListOutputMeta(
                 current_page=1,

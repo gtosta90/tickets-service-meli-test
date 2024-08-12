@@ -9,7 +9,7 @@ from src.core.category.domain.category import Category
 
 
 class TestDeleteCategory:
-    def test_delete_link_from_repository(self):
+    def test_delete_category_from_repository(self):
         category = Category(
             name="KITS",
             display_name="KITS",
@@ -25,7 +25,7 @@ class TestDeleteCategory:
         mock_repository.delete.assert_called_once_with(category.id)
 
 
-    def test_when_link_not_found_then_raise_exception(self):
+    def test_when_category_not_found_then_raise_exception(self):
         mock_repository = create_autospec(CategoryRepository)
         mock_repository.get_by_id.return_value = None
 

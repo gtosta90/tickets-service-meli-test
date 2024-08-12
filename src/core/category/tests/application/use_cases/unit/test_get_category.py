@@ -10,7 +10,7 @@ from src.core.category.application.use_cases.exceptions import CategoryNotFound,
 from src.core.category.domain.category import Category
 
 
-class TestGetLink:
+class TestGetCategory:
     def test_when_category_exists_then_return_response_dto(self):
         mock_category = Category(
             id=uuid.uuid4(),
