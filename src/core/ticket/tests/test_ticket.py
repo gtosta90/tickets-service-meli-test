@@ -2,8 +2,8 @@ import pytest
 from uuid import UUID
 import uuid
 
-from core.ticket.domain.ticket import Ticket
-from core.ticket.domain.value_objects import Status, Level
+from src.core.ticket.domain.ticket import Ticket
+from src.core.ticket.domain.value_objects import Status, Level
 
 
 

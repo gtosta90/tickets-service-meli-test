@@ -1,7 +1,7 @@
 import uuid, datetime
 from dataclasses import dataclass, field
 from uuid import UUID
-from core.ticket.domain.value_objects import Status, Level
+from src.core.ticket.domain.value_objects import Status, Level
 
 @dataclass
 class Ticket():
