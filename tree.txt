@@ -1,0 +1,62 @@
+src
+└── core
+    ├── category
+    │   ├── application
+    │   │   └── use_cases
+    │   │       ├── create_category.py
+    │   │       ├── delete_category.py
+    │   │       ├── exceptions.py
+    │   │       ├── get_category.py
+    │   │       ├── list_categories.py
+    │   │       └── update_category.py
+    │   ├── domain
+    │   │   ├── category.py
+    │   │   └── category_repository.py
+    │   ├── infra
+    │   │   └── in_memory_category_repository.py
+    │   └── tests
+    │       ├── application
+    │       │   ├── __init__.py
+    │       │   └── use_cases
+    │       │       ├── __init__.py
+    │       │       ├── integration
+    │       │       └── unit
+    │       │           ├── __init__.py
+    │       │           ├── test_create_category.py
+    │       │           ├── test_delete_category.py
+    │       │           ├── test_get_category.py
+    │       │           ├── test_list_category.py
+    │       │           └── test_update_category.py
+    │       ├── domain
+    │       │   ├── __init__.py
+    │       │   └── test_category.py
+    │       └── __init__.py
+    └── ticket
+        ├── application
+        │   └── use_cases
+        │       ├── create_ticket.py
+        │       ├── delete_ticket.py
+        │       ├── exceptions.py
+        │       ├── get_ticket.py
+        │       ├── list_tickets.py
+        │       └── update_ticket.py
+        ├── domain
+        │   ├── ticket.py
+        │   ├── ticket_repository.py
+        │   └── value_objects.py
+        ├── infra
+        │   └── in_memory_ticket_repository.py
+        └── tests
+            ├── application
+            │   └── use_cases
+            │       ├── integration
+            │       └── unit
+            │           ├── __init__.py
+            │           ├── test_create_ticket.py
+            │           ├── test_delete_ticket.py
+            │           ├── test_get_ticket.py
+            │           ├── test_list_ticket.py
+            │           └── test_update_ticket.py
+            └── domain
+                ├── __init__.py
+                └── test_ticket.py
