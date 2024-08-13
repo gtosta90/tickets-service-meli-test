@@ -19,7 +19,8 @@ class CreateTicketRequest:
 
 @dataclass
 class CreateTicketResponse:
-    id: UUID
+    id: UUID | None
+    message: str
 
 class CreateTicket:
     def __init__(self, repository: TicketRepository):
@@ -27,6 +28,9 @@ class CreateTicket:
 
     def execute(self, request: CreateTicketRequest) -> CreateTicketResponse:
         try:
+            if request.severity == 1:
+                return CreateTicketResponse(id=None, message="Por favor, crie um ticket no link: http://example/fast, a equipe de guardian buscará resolver a sua issue.")
+            
             ticket = Ticket(
                 title=request.title,
                 user_create=request.user_create,
@@ -40,5 +44,4 @@ class CreateTicket:
             raise InvalidTicket(err)
 
         self.repository.save(ticket)
-        return CreateTicketResponse(id=ticket.id)
-
+        return CreateTicketResponse(id=ticket.id, message=None)

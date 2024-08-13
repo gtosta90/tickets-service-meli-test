@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import MagicMock, create_autospec
 from uuid import UUID
 import uuid
@@ -21,6 +22,7 @@ class TestGetCategory:
         )
         mock_repository = create_autospec(CategoryRepository)
         mock_repository.get_by_id.return_value = mock_category
+        mock_repository.list_by_relationship_id.return_value = list()
 
         use_case = GetCategory(repository=mock_repository)
         request = GetCategoryRequest(id=mock_category.id)
@@ -35,7 +37,6 @@ class TestGetCategory:
             created_at=mock_category.created_at,
             updated_at=mock_category.updated_at,
             is_active=mock_category.is_active,
-            subcategories=[]
         )
 
     def test_when_category_not_found_then_raise_exception(self):

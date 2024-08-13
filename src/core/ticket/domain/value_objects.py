@@ -1,4 +1,4 @@
-from enum import StrEnum, unique
+from enum import IntEnum, StrEnum, unique
 
 @unique
 class Status(StrEnum):
@@ -8,8 +8,8 @@ class Status(StrEnum):
     CLOSED = "CLOSED"
 
 @unique
-class Level(StrEnum):
-    ISSUE_HIGH = "1"
-    HIGH = "2"
-    MEDIUM = "3"
-    LOW = "4"
+class Level(IntEnum):
+    ISSUE_HIGH = 1
+    HIGH = 2
+    MEDIUM = 3
+    LOW = 4
