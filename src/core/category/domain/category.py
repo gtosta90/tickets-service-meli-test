@@ -1,3 +1,4 @@
+from typing import List
 import uuid, datetime
 from dataclasses import dataclass, field
 from uuid import UUID
