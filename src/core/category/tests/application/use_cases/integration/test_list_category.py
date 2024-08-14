@@ -74,7 +74,7 @@ class TestListCategory:
                     created_at=category_1.created_at,
                     updated_at=category_1.updated_at,
                     is_active=category_1.is_active,
-                    subcategories=category_1.subcategories
+                    subcategories=[]
                 ),
                 CategoryOutput(
                     id=category_2.id,
@@ -84,7 +84,7 @@ class TestListCategory:
                     created_at=category_2.created_at,
                     updated_at=category_2.updated_at,
                     is_active=category_2.is_active,
-                    subcategories=category_2.subcategories
+                    subcategories=[]
                 )
             ],
             meta=ListOutputMeta(

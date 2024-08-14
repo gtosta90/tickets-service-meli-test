@@ -10,8 +10,8 @@ class Ticket():
     category: UUID
     severity: Level
     description: str = ""
-    created_at = datetime.datetime.now()
-    updated_at = None
+    created_at: datetime = datetime.datetime.now()
+    updated_at: datetime = None
     user_assigned: UUID = None
     status: Status = Status.OPEN
     id: UUID = field(default_factory=uuid.uuid4)

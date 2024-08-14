@@ -15,7 +15,7 @@ class CategoryOutput:
     created_at: datetime
     updated_at: datetime
     is_active: bool
-    subcategories: list
+    subcategories: list = None
 
 
 @dataclass

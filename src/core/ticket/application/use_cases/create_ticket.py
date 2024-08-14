@@ -31,6 +31,9 @@ class CreateTicket:
             if request.severity == 1:
                 return CreateTicketResponse(id=None, message="Por favor, crie um ticket no link: http://example/fast, a equipe de guardian buscará resolver a sua issue.")
             
+            if request.user_assigned == "":
+                request.user_assigned = None 
+            
             ticket = Ticket(
                 title=request.title,
                 user_create=request.user_create,
