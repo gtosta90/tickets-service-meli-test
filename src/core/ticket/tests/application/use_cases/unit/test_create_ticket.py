@@ -16,11 +16,11 @@ class TestCreateTicket:
         use_case = CreateTicket(repository=mock_repository)
         request = CreateTicketRequest(
             title="Ticket 1",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH,
             description="Ticket description",
-            user_assigned=uuid.uuid4(),
+            user_assigned=0,
             status=Status.OPEN
         )
 
@@ -37,11 +37,11 @@ class TestCreateTicket:
         use_case = CreateTicket(repository=mock_repository)
         request = CreateTicketRequest(
             title="Ticket 1",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.ISSUE_HIGH,
             description="Ticket description",
-            user_assigned=uuid.uuid4(),
+            user_assigned=0,
             status=Status.OPEN
         )
 
@@ -58,11 +58,11 @@ class TestCreateTicket:
             use_case.execute(
                 CreateTicketRequest(
                     title="",
-                    user_create=uuid.uuid4(),
+                    user_create=1,
                     category=uuid.uuid4(),
                     severity=Level.HIGH,
                     description="Ticket description",
-                    user_assigned=uuid.uuid4(),
+                    user_assigned=0,
                     status=Status.OPEN
                 )
             )

@@ -10,11 +10,11 @@ from src.core.ticket.domain.value_objects import Level, Status
 @dataclass
 class CreateTicketRequest:
     title: str
-    user_create: UUID
+    user_create: int
     category: UUID
     severity: Level
     description: str = ""
-    user_assigned: UUID = None
+    user_assigned: int = 0
     status: Status = Status.OPEN
 
 @dataclass
@@ -30,6 +30,9 @@ class CreateTicket:
         try:
             if request.severity == 1:
                 return CreateTicketResponse(id=None, message="Por favor, crie um ticket no link: http://example/fast, a equipe de guardian buscará resolver a sua issue.")
+            
+            if request.user_assigned == "":
+                request.user_assigned = None 
             
             ticket = Ticket(
                 title=request.title,

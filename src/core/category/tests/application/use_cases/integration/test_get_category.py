@@ -41,7 +41,8 @@ class TestGetCategory:
             relationship_id = "",
             created_at=category_1.created_at,
             updated_at=category_1.updated_at,
-            is_active=True
+            is_active=True,
+            subcategories=[]
         )
 
     def test_when_category_with_id_does_not_exist_then_raise_not_found(self):

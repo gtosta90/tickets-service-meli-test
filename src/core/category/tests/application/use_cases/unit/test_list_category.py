@@ -65,7 +65,7 @@ class TestListCategories:
             data=[],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=0,
             ),
         )
@@ -103,38 +103,7 @@ class TestListCategories:
                     updated_at=category_2.updated_at,
                     is_active=category_2.is_active,
                     subcategories=[]
-                )
-            ],
-            meta=ListOutputMeta(
-                current_page=1,
-                per_page=2,
-                total=3,
-            ),
-        )
-
-    def test_fetch_page_without_elements(self, mock_populated_repository: CategoryRepository) -> None:
-        use_case = ListCategories(repository=mock_populated_repository)
-        response = use_case.execute(request=ListCategoriesRequest(current_page=3))
-
-        assert response == ListCategoriesResponse(
-            data=[],
-            meta=ListOutputMeta(
-                current_page=3,
-                per_page=2,
-                total=3,
-            ),
-        )
-
-    def test_fetch_last_page_with_elements(
-        self,
-        mock_populated_repository: CategoryRepository,
-        category_3: Category,  # Foi "empurrado" para última página
-    ) -> None:
-        use_case = ListCategories(repository=mock_populated_repository)
-        response = use_case.execute(request=ListCategoriesRequest(current_page=2))
-
-        assert response == ListCategoriesResponse(
-            data=[
+                ),
                 CategoryOutput(
                     id=category_3.id,
                     name=category_3.name,
@@ -147,8 +116,38 @@ class TestListCategories:
                 )
             ],
             meta=ListOutputMeta(
+                current_page=1,
+                per_page=10,
+                total=3,
+            ),
+        )
+
+    def test_fetch_page_without_elements(self, mock_populated_repository: CategoryRepository) -> None:
+        use_case = ListCategories(repository=mock_populated_repository)
+        response = use_case.execute(request=ListCategoriesRequest(current_page=3))
+
+        assert response == ListCategoriesResponse(
+            data=[],
+            meta=ListOutputMeta(
+                current_page=3,
+                per_page=10,
+                total=3,
+            ),
+        )
+
+    def test_fetch_last_page_with_elements(
+        self,
+        mock_populated_repository: CategoryRepository,
+        category_3: Category,
+    ) -> None:
+        use_case = ListCategories(repository=mock_populated_repository)
+        response = use_case.execute(request=ListCategoriesRequest(current_page=2))
+
+        assert response == ListCategoriesResponse(
+            data=[],
+            meta=ListOutputMeta(
                 current_page=2,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )

@@ -12,7 +12,7 @@ class UpdateTicketRequest:
     category: UUID | None = None
     severity: Level | None = None
     description: str | None = None
-    user_assigned: UUID | None = None
+    user_assigned: int | None = None
     status: Status | None = None
 
 class UpdateTicket:

@@ -45,8 +45,8 @@ class GetCategory:
 
         _get_subcategories(self.repository, category_response)
 
-        return category_response 
-    
+        return category_response
+
 def _get_subcategories(repo: CategoryRepository, category_resp: GetCategoryResponse):
     subcategory_list = repo.list_by_relationship_id(category_resp.id)
     category_resp.subcategories = subcategory_list
@@ -55,5 +55,6 @@ def _get_subcategories(repo: CategoryRepository, category_resp: GetCategoryRespo
         #itera a lista recursivo
         for subcategory in subcategory_list:
             _get_subcategories(repo, subcategory)
+        return category_resp
     else:
         return category_resp

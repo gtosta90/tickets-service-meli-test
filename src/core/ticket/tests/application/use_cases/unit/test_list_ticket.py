@@ -19,7 +19,7 @@ class TestListTickets:
         return Ticket(
             title="Ticket 1",
             description="Ticket 1 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH
         )
@@ -29,7 +29,7 @@ class TestListTickets:
         return Ticket(
             title="Ticket 2",
             description="Ticket 2 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH
         )
@@ -39,7 +39,7 @@ class TestListTickets:
         return Ticket(
             title="Ticket 3",
             description="Ticket 3 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH
         )
@@ -76,7 +76,7 @@ class TestListTickets:
             data=[],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=0,
             ),
         )
@@ -120,7 +120,7 @@ class TestListTickets:
             ],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
@@ -133,7 +133,7 @@ class TestListTickets:
             data=[],
             meta=ListOutputMeta(
                 current_page=3,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
@@ -163,7 +163,7 @@ class TestListTickets:
             ],
             meta=ListOutputMeta(
                 current_page=2,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
