@@ -3,6 +3,10 @@ from uuid import UUID
 import uuid
 
 import pytest
+from core.category.domain.category import Category
+from core.category.domain.category_repository import CategoryRepository
+from core.user.domain.user import User
+from core.user.domain.user_repository import UserRepository
 from src.core.ticket.domain.ticket_repository import TicketRepository
 
 from src.core.ticket.application.use_cases.create_ticket import CreateTicket, CreateTicketRequest, CreateTicketResponse
@@ -12,15 +16,38 @@ from src.core.ticket.domain.value_objects import Level, Status
 
 class TestCreateTicket:
     def test_create_ticket_with_valid_data(self):
-        mock_repository = MagicMock(TicketRepository)
-        use_case = CreateTicket(repository=mock_repository)
+        ticket_mock_repository = MagicMock(TicketRepository)
+        category_mock_repository = MagicMock(CategoryRepository)
+        user_mock_repository = MagicMock(UserRepository)
+
+        use_case = CreateTicket(
+            ticket_repository=ticket_mock_repository,
+            category_repository=category_mock_repository,
+            user_repository=user_mock_repository,
+        )
+
+        user = User(
+            id=1,
+            name="Teste",
+            username="Teste",
+            email="teste@teste"
+        )
+
+        category = Category(
+            name="Teste",
+            display_name="Teste"
+        )
+
+        user_mock_repository.list.return_value = [user]
+        category_mock_repository.list.return_value = [category]
+
         request = CreateTicketRequest(
             title="Ticket 1",
             user_create=1,
-            category=uuid.uuid4(),
+            category=category.id,
             severity=Level.HIGH,
             description="Ticket description",
-            user_assigned=0,
+            user_assigned=1,
             status=Status.OPEN
         )
 
@@ -30,18 +57,41 @@ class TestCreateTicket:
         assert response.message is None
         assert isinstance(response, CreateTicketResponse)
         assert isinstance(response.id, UUID)
-        assert mock_repository.save.called is True
+        assert ticket_mock_repository.save.called is True
 
     def test_create_ticket_with_valid_data_and_severity_issue_high(self):
-        mock_repository = MagicMock(TicketRepository)
-        use_case = CreateTicket(repository=mock_repository)
+        ticket_mock_repository = MagicMock(TicketRepository)
+        category_mock_repository = MagicMock(CategoryRepository)
+        user_mock_repository = MagicMock(UserRepository)
+        
+        use_case = CreateTicket(
+            ticket_repository=ticket_mock_repository,
+            category_repository=category_mock_repository,
+            user_repository=user_mock_repository,
+        )
+        
+        user = User(
+            id=1,
+            name="Teste",
+            username="Teste",
+            email="teste@teste"
+        )
+
+        category = Category(
+            name="Teste",
+            display_name="Teste"
+        )
+
+        user_mock_repository.list.return_value = [user]
+        category_mock_repository.list.return_value = [category]
+
         request = CreateTicketRequest(
             title="Ticket 1",
             user_create=1,
-            category=uuid.uuid4(),
+            category=category.id,
             severity=Level.ISSUE_HIGH,
             description="Ticket description",
-            user_assigned=0,
+            user_assigned=1,
             status=Status.OPEN
         )
 
@@ -52,17 +102,39 @@ class TestCreateTicket:
         assert isinstance(response, CreateTicketResponse)
 
     def test_create_ticket_with_invalid_data(self):
-        use_case = CreateTicket(repository=MagicMock(TicketRepository))
+        ticket_mock_repository = MagicMock(TicketRepository)
+        category_mock_repository = MagicMock(CategoryRepository)
+        user_mock_repository = MagicMock(UserRepository)
+        
+        use_case = CreateTicket(
+            ticket_repository=ticket_mock_repository,
+            category_repository=category_mock_repository,
+            user_repository=user_mock_repository,
+        )
 
+        user = User(
+            id=1,
+            name="Teste",
+            username="Teste",
+            email="teste@teste"
+        )
+
+        category = Category(
+            name="Teste",
+            display_name="Teste"
+        )
+
+        user_mock_repository.list.return_value = [user]
+        category_mock_repository.list.return_value = [category]
         with pytest.raises(InvalidTicket, match="title cannot be empty") as exc_info:
             use_case.execute(
                 CreateTicketRequest(
                     title="",
                     user_create=1,
-                    category=uuid.uuid4(),
+                    category=category.id,
                     severity=Level.HIGH,
                     description="Ticket description",
-                    user_assigned=0,
+                    user_assigned=1,
                     status=Status.OPEN
                 )
             )

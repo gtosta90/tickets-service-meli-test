@@ -14,6 +14,8 @@ from rest_framework.status import (
 
 
 from core.category.application.use_cases.exceptions import InvalidCategory
+from django_project.category_app.repository import DjangoORMCategoryRepository
+from django_project.user_app.repository import ApiClientUserRepository
 from src.core.ticket.application.use_cases.create_ticket import (
     CreateTicket,
     CreateTicketRequest,
@@ -84,7 +86,11 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = CreateTicketRequest(**serializer.validated_data)
-        use_case = CreateTicket(repository=DjangoORMTicketRepository())
+        use_case = CreateTicket(            
+            ticket_repository=DjangoORMTicketRepository(),
+            user_repository=ApiClientUserRepository(),
+            category_repository=DjangoORMCategoryRepository())
+        
         output = use_case.execute(request=input)
 
         return Response(
@@ -100,7 +106,10 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = UpdateTicketRequest(**serializer.validated_data)
-        use_case = UpdateTicket(repository=DjangoORMTicketRepository())
+        use_case = UpdateTicket(
+            ticket_repository=DjangoORMTicketRepository(),
+            user_repository=ApiClientUserRepository(),
+            category_repository=DjangoORMCategoryRepository())
         try:
             use_case.execute(request=input)
         except TicketNotFound:
@@ -116,7 +125,12 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = UpdateTicketRequest(**serializer.validated_data)
-        use_case = UpdateTicket(repository=DjangoORMTicketRepository())
+        
+        use_case = UpdateTicket(            
+            ticket_repository=DjangoORMTicketRepository(),
+            user_repository=ApiClientUserRepository(),
+            category_repository=DjangoORMCategoryRepository())
+        
         try:
             use_case.execute(request=input)
         except TicketNotFound:

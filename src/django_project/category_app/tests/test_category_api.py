@@ -124,9 +124,9 @@ class TestUpdateAPI:
         url = reverse("category-detail", kwargs={"pk": category_1.id})
     
         data = {
-            "name": "KITS",
-            "display_name": "KITS",
-            "relationship_id": "76151224-4851-4edb-aa79-24a59c5b61e8",
+            "name": "KITS1",
+            "display_name": "KITS1",
+            "relationship_id": "",
             "is_active": True
         }
         response = APIClient().put(url, data=data)
@@ -134,7 +134,7 @@ class TestUpdateAPI:
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not response.data
         updated_category = category_repository.get_by_id(category_1.id)
-        assert updated_category.name == "KITS"
-        assert updated_category.display_name == "KITS"
-        assert updated_category.relationship_id == "76151224-4851-4edb-aa79-24a59c5b61e8"
+        assert updated_category.name == "KITS1"
+        assert updated_category.display_name == "KITS1"
+        assert updated_category.relationship_id == ""
         assert updated_category.is_active is True
