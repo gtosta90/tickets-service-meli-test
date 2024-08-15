@@ -7,11 +7,11 @@ class TestCreateTicketRequestSerializer:
         serializer = CreateTicketRequestSerializer(
             data={
                 "title": "Ticket 1",
-                "user_create": "86bedf25-8628-43a3-a73a-2f3ac051648b",
+                "user_create": 1,
                 "category": "86bedf25-8628-43a3-a73a-2f3ac051648b",
                 "severity": 1,
                 "description": "Ticket 1 Desc",
-                "user_assigned": "",
+                "user_assigned": 0,
                 "status": "OPEN"
             }
         )
@@ -22,11 +22,11 @@ class TestCreateTicketRequestSerializer:
         serializer = CreateTicketRequestSerializer(
             data={
                 "title": "Ticket 1",
-                "user_create": "86bedf25-8628-43a3-a73a-2f3ac051648b",
+                "user_create": 1,
                 "category": "86bedf25-8628-43a3-a73a-2f3ac051648b",
                 "severity": 1,
                 "description": "Ticket 1 Desc",
-                "user_assigned": ""
+                "user_assigned": 0
             },
             partial=True,
         )
@@ -38,11 +38,11 @@ class TestCreateTicketRequestSerializer:
         serializer = CreateTicketRequestSerializer(
             data={
                 "title": "Ticket 1",
-                "user_create": "86bedf25-8628-43a3-a73a-2f3ac051648b",
+                "user_create": 1,
                 "category": "86bedf25-8628-43a3-a73a-2f3ac051648b",
                 "severity": 1,
                 "description": "Ticket 1 Desc",
-                "user_assigned": "",
+                "user_assigned": 0,
                 "status": "OPEN"
             },
         )

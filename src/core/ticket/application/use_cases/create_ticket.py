@@ -10,11 +10,11 @@ from src.core.ticket.domain.value_objects import Level, Status
 @dataclass
 class CreateTicketRequest:
     title: str
-    user_create: UUID
+    user_create: int
     category: UUID
     severity: Level
     description: str = ""
-    user_assigned: UUID = None
+    user_assigned: int = 0
     status: Status = Status.OPEN
 
 @dataclass

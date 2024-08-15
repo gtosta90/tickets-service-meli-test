@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_project.category_app',
-    'django_project.ticket_app'
+    'django_project.ticket_app',
+    'django_project.user_app'
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
+
+APPEND_SLASH=False

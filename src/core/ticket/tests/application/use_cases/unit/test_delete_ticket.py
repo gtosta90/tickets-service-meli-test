@@ -13,7 +13,7 @@ class TestDeleteTicket:
     def test_delete_tivket_from_repository(self):
         ticket = Ticket(
             title="Ticket 1",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH
         )

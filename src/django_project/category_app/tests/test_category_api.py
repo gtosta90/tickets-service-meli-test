@@ -53,27 +53,43 @@ class TestListAPI:
                     "id": str(category_1.id),
                     "name": "KITS",
                     "display_name": "KITS",
-                    "relationship_id": "76151224-4851-4edb-aa79-24a59c5b61e8",
-                    "is_active": True
-                },
-                {
-                    "id": str(category_2.id),
-                    "name": "KITS",
-                    "display_name": "KITS",
-                    "relationship_id": "76151224-4851-4edb-aa79-24a59c5b61e8",
+                    "relationship_id": "",
                     "is_active": True
                 }
             ],
             "meta": {
                 "current_page": 1,
-                "per_page": 2,
-                "total": 2,
+                "per_page": 10,
+                "total": 1,
             },
         }
 
         assert response.status_code == status.HTTP_200_OK
         response.data['data'][0]['name'] == expected_data['data'][0]['name']
-        response.data['data'][1]['name'] == expected_data['data'][1]['name']
+
+    def test_get_category(
+            self,
+            category_1: Category,
+            category_repository: DjangoORMCategoryRepository,
+        ) -> None:
+            category_repository.save(category_1)
+
+            url = f"/api/categories/{category_1.id}/"
+            response = APIClient().get(url)
+
+            expected_data = {
+                "data": 
+                    {
+                        "id": str(category_1.id),
+                        "name": "KITS",
+                        "display_name": "KITS",
+                        "relationship_id": "",
+                        "is_active": True
+                    }
+            }
+
+            assert response.status_code == status.HTTP_200_OK
+            response.data['data']['name'] == expected_data['data']['name']
 
 @pytest.mark.django_db
 class TestCreateAPI:
@@ -85,7 +101,7 @@ class TestCreateAPI:
         data = {
             "name": "KITS",
             "display_name": "KITS",
-            "relationship_id": "76151224-4851-4edb-aa79-24a59c5b61e8",
+            "relationship_id": "",
             "is_active": True
         }
         response = APIClient().post(url, data=data)

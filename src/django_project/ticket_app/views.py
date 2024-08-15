@@ -7,11 +7,13 @@ from rest_framework.request import Request
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_204_NO_CONTENT,
+    HTTP_406_NOT_ACCEPTABLE,
     HTTP_404_NOT_FOUND,
     HTTP_201_CREATED,
 )
 
 
+from core.category.application.use_cases.exceptions import InvalidCategory
 from src.core.ticket.application.use_cases.create_ticket import (
     CreateTicket,
     CreateTicketRequest,

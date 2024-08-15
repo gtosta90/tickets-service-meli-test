@@ -16,7 +16,7 @@ class TestGetTicket:
         mock_category = Ticket(
             title="Ticket 1",
             description="Ticket 1 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH,
             status=Status.OPEN

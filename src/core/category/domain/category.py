@@ -13,6 +13,7 @@ class Category():
     updated_at: datetime = None
     is_active: bool = True
     id: UUID = field(default_factory=uuid.uuid4)
+    subcategories: List = field(default_factory=list)
     
     def __post_init__(self):
         self.validate()
@@ -49,10 +50,7 @@ class Category():
         self.validate()
 
     def set_relationship(self, relationship_id):
-        if not self.relationship_id:
             self.relationship_id = relationship_id
-        else:
-            raise ValueError("relationship_id cannot be updated")
 
     def activate(self):
         self.is_active = True

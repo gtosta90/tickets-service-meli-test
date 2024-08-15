@@ -4,6 +4,7 @@ from typing import Generic, TypeVar
 from uuid import UUID
 from datetime import datetime
 
+from core.category.domain.category import Category
 from src.core.category.domain.category_repository import CategoryRepository
 
 @dataclass
@@ -27,7 +28,7 @@ class ListCategoriesRequest:
 @dataclass
 class ListOutputMeta:
     current_page: int = 1
-    per_page: int = 2
+    per_page: int = 10
     total: int = 0
 
 
@@ -55,9 +56,17 @@ class ListCategories:
             categories,
             key=lambda category: getattr(category, request.order_by),
         )
-        page_offset = (request.current_page - 1) * 2
-        categories_page = ordered_categories[page_offset:page_offset + 2]
 
+        new_ordered_categories = []
+        for category_resp in ordered_categories:
+            print("entrou")
+            new_ordered_categories.append(_get_subcategories(self.repository ,category_resp))
+
+        print(new_ordered_categories)
+        page_offset = (request.current_page - 1) * 10
+        categories_page = new_ordered_categories[page_offset:page_offset + 10]
+
+        print(categories_page)
         return ListCategoriesResponse(
             data=sorted(
                 [
@@ -76,7 +85,20 @@ class ListCategories:
             ),
             meta=ListOutputMeta(
                 current_page=request.current_page,
-                per_page=2,
+                per_page=10,
                 total=len(categories),
             ),
         )
+
+def _get_subcategories(repo: CategoryRepository, category_resp: Category):
+    subcategory_list = repo.list_by_relationship_id(category_resp.id)
+    category_resp.subcategories.append(subcategory_list)   
+    if len(subcategory_list) > 0:
+        #itera a lista recursivo
+        for subcategory in subcategory_list:
+            print('entrou')
+            _get_subcategories(repo, subcategory)
+        
+        return category_resp
+    else:
+        return category_resp

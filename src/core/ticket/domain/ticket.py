@@ -6,13 +6,13 @@ from src.core.ticket.domain.value_objects import Status, Level
 @dataclass
 class Ticket():
     title: str
-    user_create: UUID
+    user_create: int
     category: UUID
     severity: Level
     description: str = ""
     created_at: datetime = datetime.datetime.now()
     updated_at: datetime = None
-    user_assigned: UUID = None
+    user_assigned: int = 0
     status: Status = Status.OPEN
     id: UUID = field(default_factory=uuid.uuid4)
     

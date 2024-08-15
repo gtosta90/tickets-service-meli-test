@@ -2,15 +2,15 @@ from rest_framework import serializers
 
 
 class TicketResponseSerializer(serializers.Serializer):
-    id=serializers.UUIDField(),
+    id=serializers.UUIDField()
     title=serializers.CharField(max_length=100)
-    user_create=serializers.UUIDField()
+    user_create=serializers.IntegerField()
     category=serializers.UUIDField(),
     severity=serializers.IntegerField(),
     description=serializers.CharField(max_length=1024),
     created_at=serializers.DateTimeField()
     updated_at=serializers.DateTimeField()
-    user_assigned=serializers.UUIDField()
+    user_assigned=serializers.IntegerField()
     status=serializers.CharField(max_length=40)
 
 class ListOutputMetaSerializer(serializers.Serializer):
@@ -34,11 +34,11 @@ class RetrieveTicketResponseSerializer(serializers.Serializer):
 
 class CreateTicketRequestSerializer(serializers.Serializer):
     title=serializers.CharField(max_length=100)
-    user_create=serializers.UUIDField()
+    user_create=serializers.IntegerField()
     category=serializers.UUIDField()
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
-    user_assigned=serializers.CharField(max_length=40, allow_blank=True)
+    user_assigned=serializers.IntegerField()
     status=serializers.CharField(max_length=40)
 
 class CreateTicketResponseSerializer(serializers.Serializer):
@@ -52,7 +52,7 @@ class UpdateTicketRequestSerializer(serializers.Serializer):
     category=serializers.UUIDField()
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
-    user_assigned=serializers.UUIDField()
+    user_assigned=serializers.IntegerField()
     status=serializers.CharField(max_length=40)
 
 class DeleteTicketRequestSerializer(serializers.Serializer):

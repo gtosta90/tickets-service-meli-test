@@ -15,13 +15,13 @@ class GetTicketRequest:
 class GetTicketResponse:
     id: UUID
     title: str
-    user_create: UUID
+    user_create: int
     category: UUID
     severity: Level
     description: str
     created_at: datetime
     updated_at: datetime
-    user_assigned: UUID
+    user_assigned: int
     status: Status
 
 class GetTicket:

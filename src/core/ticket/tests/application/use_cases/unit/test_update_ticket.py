@@ -15,7 +15,7 @@ class TestUpdateTicket:
         return Ticket(
             title="Ticket 1",
             description="Ticket 1 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=Level.HIGH
         )
@@ -39,7 +39,7 @@ class TestUpdateTicket:
             description="Ticket 2 Desc",
             category=common_uuid,
             severity=Level.MEDIUM,
-            user_assigned=common_uuid,
+            user_assigned=0,
             status=Status.IN_SERVICE
         ))
 
@@ -48,7 +48,7 @@ class TestUpdateTicket:
         assert ticket.severity == Level.MEDIUM
         assert ticket.status == Status.IN_SERVICE
         assert ticket.category == common_uuid
-        assert ticket.user_assigned == common_uuid
+        assert ticket.user_assigned == 0
 
         mock_repository.update.assert_called_once_with(ticket)
 

@@ -116,15 +116,15 @@ class TestSetRelationship:
 
         assert category.relationship_id is not None
 
-    def test_set_realtionship_when_category_relationship_not_empty(self):
-        category = Category(
-            name="KITS",
-            display_name="KITS",
-            relationship_id=uuid.uuid4(),
-            is_active=True,
-        )
-        with pytest.raises(ValueError, match="relationship_id cannot be updated"):
-            category.set_relationship(uuid.uuid4())
+    # def test_set_realtionship_when_category_relationship_not_empty(self):
+    #     category = Category(
+    #         name="KITS",
+    #         display_name="KITS",
+    #         relationship_id=uuid.uuid4(),
+    #         is_active=True,
+    #     )
+    #     with pytest.raises(ValueError, match="relationship_id cannot be updated"):
+    #         category.set_relationship(uuid.uuid4())
 
 class TestActivate:
     def test_activate_inactive_category(self):

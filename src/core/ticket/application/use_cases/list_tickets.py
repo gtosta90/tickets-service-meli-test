@@ -11,13 +11,13 @@ from src.core.ticket.domain.value_objects import Level, Status
 class TicketOutput:
     id: UUID
     title: str
-    user_create: UUID
+    user_create: int
     category: UUID
     severity: Level
     description: str
     created_at: datetime
     updated_at: datetime
-    user_assigned: UUID
+    user_assigned: int
     status: Status
 
 
@@ -30,7 +30,7 @@ class ListTicketsRequest:
 @dataclass
 class ListOutputMeta:
     current_page: int = 1
-    per_page: int = 2
+    per_page: int = 10
     total: int = 0
 
 
@@ -81,7 +81,7 @@ class ListTickets:
             ),
             meta=ListOutputMeta(
                 current_page=request.current_page,
-                per_page=2,
+                per_page=10,
                 total=len(tickets),
             ),
         )

@@ -21,11 +21,14 @@ from rest_framework.routers import DefaultRouter
 
 from django_project.category_app.views import CategoryViewSet
 from django_project.ticket_app.views import TicketViewSet
+from django_project.user_app.views import UserViewSet
 
 router = DefaultRouter()
 
 router.register(r"api/categories", CategoryViewSet, basename="category")
 router.register(r"api/tickets", TicketViewSet, basename="ticket")
+router.register(r"api/users", UserViewSet, basename="user")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

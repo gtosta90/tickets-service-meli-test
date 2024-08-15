@@ -12,11 +12,11 @@ from src.django_project.ticket_app.repository import DjangoORMTicketRepository
 def ticket_1():
     return Ticket(
         title="Ticket 1",
-        user_create=uuid4(),
+        user_create=1,
         category=uuid4(),
         severity=1,
         description="Ticket 1 Desc",
-        user_assigned=None,
+        user_assigned=0,
         status="OPEN"
     )
 
@@ -25,11 +25,11 @@ def ticket_1():
 def ticket_2():
     return Ticket(
         title="Ticket 2",
-        user_create=uuid4(),
+        user_create=1,
         category=uuid4(),
         severity=1,
         description="Ticket 2 Desc",
-        user_assigned=None,
+        user_assigned=0,
         status="OPEN"
     )
 
@@ -76,7 +76,7 @@ class TestListAPI:
             ],
             "meta": {
                 "current_page": 1,
-                "per_page": 2,
+                "per_page": 10,
                 "total": 2,
             },
         }
@@ -94,11 +94,11 @@ class TestCreateAPI:
         url = reverse("ticket-list")
         data = {
                     "title": "Ticket 1",
-                    "user_create": uuid4(),
+                    "user_create": 1,
                     "category": uuid4(),
                     "severity": 1,
                     "description": "Ticket 1 Desc",
-                    "user_assigned": "",
+                    "user_assigned": 0,
                     "status": "OPEN"
             }
         response = APIClient().post(url, data=data)
@@ -113,11 +113,11 @@ class TestCreateAPI:
         url = reverse("ticket-list")
         data = {
                     "title": "Ticket 1",
-                    "user_create": uuid4(),
+                    "user_create": 1,
                     "category": uuid4(),
                     "severity": 2,
                     "description": "Ticket 1 Desc",
-                    "user_assigned": "",
+                    "user_assigned": 0,
                     "status": "OPEN"
             }
         response = APIClient().post(url, data=data)
@@ -143,7 +143,7 @@ class TestUpdateAPI:
             "title": "Ticket 1",
             "severity": 1,
             "description": "Ticket 1 Desc",
-            "user_assigned": uuid4(),
+            "user_assigned": 0,
             "status": "IN SERVICE",
         }
         response = APIClient().patch(url, data=data)

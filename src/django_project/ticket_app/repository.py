@@ -21,9 +21,7 @@ class DjangoORMTicketRepository(TicketRepository):
             return None
          
     def delete(self, id: UUID) -> None:
-         self.model.objects.filter(pk=id).update(
-            is_active=False,
-        )
+         self.model.objects.filter(pk=id).delete()
         #self.model.objects.filter(id=id).delete()
 
     def list(self) -> list[Ticket]:

@@ -21,19 +21,17 @@ class DjangoORMCategoryRepository(CategoryRepository):
             return None
     
     def list_by_relationship_id(self, id: UUID) -> List[Category]:
-        try:
-            return [CategoryModelMapper.to_entity(category) for category in self.model.objects.all(id=id)]
-        except self.model.DoesNotExist:
-            return []
+        return [CategoryModelMapper.to_entity(category) for category in self.model.objects.all().filter(relationship_id=id)]
         
     def delete(self, id: UUID) -> None:
-         self.model.objects.filter(pk=id).update(
-            is_active=False,
-        )
+        self.model.objects.filter(pk=id).delete()
+        # self.model.objects.filter(pk=id).update(
+        #     is_active=False,
+        # )
         #self.model.objects.filter(id=id).delete()
 
     def list(self) -> list[Category]:
-        return [CategoryModelMapper.to_entity(category) for category in self.model.objects.all()]
+        return [CategoryModelMapper.to_entity(category) for category in self.model.objects.all().filter(relationship_id="")]
 
     def update(self, category: Category) -> None:
         self.model.objects.filter(pk=category.id).update(

@@ -85,11 +85,21 @@ class TestListCategory:
                     updated_at=category_2.updated_at,
                     is_active=category_2.is_active,
                     subcategories=[]
+                ),
+                CategoryOutput(
+                    id=category_3.id,
+                    name=category_3.name,
+                    display_name=category_3.display_name,
+                    relationship_id=category_3.relationship_id,
+                    created_at=category_3.created_at,
+                    updated_at=category_3.updated_at,
+                    is_active=category_3.is_active,
+                    subcategories=[]
                 )
             ],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )

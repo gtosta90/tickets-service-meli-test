@@ -10,11 +10,11 @@ class TestSave:
     def test_save_ticket_in_database(self):
         ticket = Ticket(
             title="Ticket 1",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
             severity=1,
             description="Ticket 1 Desc",
-            user_assigned=None,
+            user_assigned=0,
             status="OPEN",
         )
         repository = DjangoORMTicketRepository()
