@@ -21,6 +21,7 @@ class TestListTickets:
             description="Ticket 1 Desc",
             user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
 
@@ -31,6 +32,7 @@ class TestListTickets:
             description="Ticket 2 Desc",
             user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
 
@@ -41,6 +43,7 @@ class TestListTickets:
             description="Ticket 3 Desc",
             user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
 
@@ -98,6 +101,7 @@ class TestListTickets:
                     title=ticket_1.title,
                     user_create=ticket_1.user_create,
                     category=ticket_1.category,
+                    subcategory=ticket_1.subcategory,
                     severity=ticket_1.severity,
                     description=ticket_1.description,
                     created_at=ticket_1.created_at,
@@ -110,6 +114,7 @@ class TestListTickets:
                     title=ticket_2.title,
                     user_create=ticket_2.user_create,
                     category=ticket_2.category,
+                    subcategory=ticket_2.subcategory,
                     severity=ticket_2.severity,
                     description=ticket_2.description,
                     created_at=ticket_2.created_at,
@@ -122,6 +127,7 @@ class TestListTickets:
                     title=ticket_3.title,
                     user_create=ticket_3.user_create,
                     category=ticket_3.category,
+                    subcategory=ticket_3.subcategory,
                     severity=ticket_3.severity,
                     description=ticket_3.description,
                     created_at=ticket_3.created_at,

@@ -14,6 +14,7 @@ class TicketOutput:
     title: str
     user_create: int
     category: UUID
+    subcategory: UUID
     severity: Level
     description: str
     created_at: datetime
@@ -70,6 +71,7 @@ class ListTickets:
                         title=ticket.title,
                         user_create=ticket.user_create,
                         category=ticket.category,
+                        subcategory=ticket.subcategory,
                         severity=ticket.severity,
                         description=ticket.description,
                         created_at=ticket.created_at,

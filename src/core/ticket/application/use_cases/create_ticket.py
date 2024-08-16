@@ -18,6 +18,7 @@ class CreateTicketRequest:
     title: str
     user_create: int
     category: UUID
+    subcategory: UUID
     severity: Level
     description: str = ""
     user_assigned: int = 0
@@ -61,6 +62,7 @@ class CreateTicket:
                 title=request.title,
                 user_create=request.user_create,
                 category=request.category,
+                subcategory=request.subcategory,
                 severity=Level(request.severity),
                 description=request.description,
                 user_assigned=request.user_assigned,

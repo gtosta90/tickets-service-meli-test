@@ -8,8 +8,9 @@ from src.core.ticket.domain.value_objects import Status, Level
 class Ticket(Entity):
     title: str
     user_create: int
-    category: UUID
     severity: Level
+    category: UUID
+    subcategory: UUID = None
     description: str = ""
     created_at: datetime = datetime.datetime.now()
     updated_at: datetime = None
@@ -53,9 +54,10 @@ class Ticket(Entity):
     def __repr__(self):
         return f"<Category {self.title} - {self.user_create} - ({self.id})>"
 
-    def update_ticket(self, title, category, severity, description, user_assigned, status):
+    def update_ticket(self, title, category, subcategory, severity, description, user_assigned, status):
         self.title = title
         self.category = category
+        self.subcategory = subcategory
         self.severity = severity
         self.description = description
         self.user_assigned = user_assigned

@@ -15,6 +15,7 @@ class UpdateTicketRequest:
     id: UUID
     title: str | None = None
     category: UUID | None = None
+    subcategory: UUID | None = None
     severity: Level | None = None
     description: str | None = None
     user_assigned: int | None = None
@@ -48,6 +49,7 @@ class UpdateTicket:
         try:
             current_title = ticket.title
             current_category = ticket.category
+            current_subcategory = ticket.subcategory
             current_severity = ticket.severity
             current_description = ticket.description
             current_user_assigned = ticket.user_assigned
@@ -58,6 +60,9 @@ class UpdateTicket:
 
             if request.category is not None:
                 current_category = request.category
+            
+            if request.category is not None:
+                current_subcategory = request.subcategory
 
             if request.severity is not None:
                 current_severity = request.severity
@@ -76,6 +81,7 @@ class UpdateTicket:
                 description=current_description,
                 user_assigned=current_user_assigned,
                 category=current_category,
+                subcategory=current_subcategory,
                 severity=current_severity,
                 status=current_status
             )

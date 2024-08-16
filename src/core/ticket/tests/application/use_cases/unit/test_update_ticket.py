@@ -38,6 +38,7 @@ class TestUpdateTicket:
             description="Ticket 1 Desc",
             user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
     
@@ -80,6 +81,7 @@ class TestUpdateTicket:
             title="Ticket 2",
             description="Ticket 2 Desc",
             category=category.id,
+            subcategory=None,
             severity=Level.MEDIUM,
             user_assigned=user.id,
             status=Status.IN_SERVICE
@@ -113,6 +115,7 @@ class TestUpdateTicket:
             id=ticket.id,
             title="",
             category=category.id,
+            subcategory=None,
             user_assigned=1
         )
 
