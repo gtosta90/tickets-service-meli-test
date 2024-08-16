@@ -15,7 +15,7 @@ class TestUpdateCategory:
         category = Category(
             name="KITS",
             display_name="KITS",
-            relationship_id = uuid.uuid4(),
+            relationship_id = "",
             is_active=True
         )
         repository = InMemoryCategoryRepository()

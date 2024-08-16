@@ -8,14 +8,14 @@ class Validates:
     def validate_user(self, user_id: int, user_repository: UserRepository) -> list[str]:
             existing_user_ids = [{user.id for user in user_repository.list()}]
             if any(user_id not in i for i in existing_user_ids):
-                return ["Invalid User"]
+                return ["Invalid user_created"]
             return []
 
     def validate_user_assigned(self, user_id: int, user_repository: UserRepository) -> list[str]:
         if user_id > 0:
             existing_user_ids = [{user.id for user in user_repository.list()}]
             if any(user_id not in i for i in existing_user_ids):
-                return ["Invalid User"]
+                return ["Invalid user_assigned"]
             return []
         return[]
 

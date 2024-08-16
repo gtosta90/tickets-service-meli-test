@@ -116,6 +116,18 @@ class TestListTickets:
                     updated_at=ticket_2.updated_at,
                     user_assigned=ticket_2.user_assigned,
                     status=ticket_2.status,
+                ),
+                TicketOutput(
+                    id=ticket_3.id,
+                    title=ticket_3.title,
+                    user_create=ticket_3.user_create,
+                    category=ticket_3.category,
+                    severity=ticket_3.severity,
+                    description=ticket_3.description,
+                    created_at=ticket_3.created_at,
+                    updated_at=ticket_3.updated_at,
+                    user_assigned=ticket_3.user_assigned,
+                    status=ticket_3.status,
                 )
             ],
             meta=ListOutputMeta(
@@ -147,20 +159,7 @@ class TestListTickets:
         response = use_case.execute(request=ListTicketsRequest(current_page=2))
 
         assert response == ListTicketsResponse(
-            data=[
-                TicketOutput(
-                    id=ticket_3.id,
-                    title=ticket_3.title,
-                    user_create=ticket_3.user_create,
-                    category=ticket_3.category,
-                    severity=ticket_3.severity,
-                    description=ticket_3.description,
-                    created_at=ticket_3.created_at,
-                    updated_at=ticket_3.updated_at,
-                    user_assigned=ticket_3.user_assigned,
-                    status=ticket_3.status,
-                )
-            ],
+            data=[],
             meta=ListOutputMeta(
                 current_page=2,
                 per_page=10,

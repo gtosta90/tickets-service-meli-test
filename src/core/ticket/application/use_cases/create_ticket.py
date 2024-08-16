@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import datetime
 from typing import Set
 from uuid import UUID, uuid4
+from src import config
 
 from core._shared.domain.notification import Notification
 from core.category.domain.category_repository import CategoryRepository
@@ -42,7 +43,7 @@ class CreateTicket:
     def execute(self, request: CreateTicketRequest) -> CreateTicketResponse:
         notification = Notification()
         validates = Validates()
-        notification.add_errors(validates.validate_user(user_id=request.user_assigned, user_repository=self._user_repository))
+        notification.add_errors(validates.validate_user(user_id=request.user_create, user_repository=self._user_repository))
         notification.add_errors(validates.validate_user_assigned(user_id=request.user_assigned, user_repository=self._user_repository))
         notification.add_errors(validates.validate_category(category_id=request.category, category_repository=self._category_repository))
 
@@ -51,7 +52,7 @@ class CreateTicket:
         
         try:
             if request.severity == 1:
-                return CreateTicketResponse(id=None, message="Por favor, crie um ticket no link: http://example/fast, a equipe de guardian buscará resolver a sua issue.")
+                return CreateTicketResponse(id=None, message=config.MESSAGE_ISSUE_HIGH)
             
             if request.user_assigned == "":
                 request.user_assigned = None 

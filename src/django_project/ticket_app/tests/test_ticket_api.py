@@ -146,7 +146,7 @@ class TestCreateAPI:
                     "category": category.id,
                     "severity": 2,
                     "description": "Ticket 1 Desc",
-                    "user_assigned": 1,
+                    "user_assigned": 0,
                     "status": "OPEN"
             }
         response = APIClient().post(url, data=data)

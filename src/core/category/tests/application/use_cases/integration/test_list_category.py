@@ -1,3 +1,4 @@
+import uuid
 import pytest
 
 from src.core.category.application.use_cases.list_categories import (
@@ -103,3 +104,64 @@ class TestListCategory:
                 total=3,
             ),
         )
+
+    def test_list_category_with_several_subcategories(self):
+            
+            category_1 = Category(
+                id=uuid.uuid4(),
+                name="KITS",
+                display_name="KITS",
+                relationship_id = "",
+                is_active=True
+            )
+
+            category_2 = Category(
+                id=uuid.uuid4(),
+                name="Database",
+                display_name="KITS - Database",
+                relationship_id=category_1.id,
+                is_active=True
+            )
+
+            category_3 = Category(
+                id=uuid.uuid4(),
+                name="Database",
+                display_name="KITS - Database - Hija 1",
+                relationship_id=category_2.id,
+                is_active=True
+            )
+
+            category_4 = Category(
+                id=uuid.uuid4(),
+                name="Oracle",
+                display_name="KITS - Database - Oracle",
+                relationship_id=category_2.id,
+                is_active=True
+            )
+
+            category_5 = Category(
+                id=uuid.uuid4(),
+                name="Database",
+                display_name="KITS - BigQueue",
+                relationship_id="",
+                is_active=True
+            )
+            
+
+            repository = InMemoryCategoryRepository(
+                categories=[
+                    category_1,
+                    category_2,
+                    category_3,
+                    category_4,
+                    category_5
+                ]
+            )
+
+            use_case = ListCategories(repository=repository)
+            request = ListCategoriesRequest()
+            response = use_case.execute(request)
+
+            assert len(response.data) == 2
+            assert len(response.data[0].subcategories) == 0
+            assert len(response.data[1].subcategories) == 1

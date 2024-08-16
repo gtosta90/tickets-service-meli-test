@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 
 from django.shortcuts import render
@@ -22,6 +23,7 @@ from src.core.ticket.application.use_cases.create_ticket import (
 )
 from src.core.ticket.application.use_cases.delete_ticket import DeleteTicket, DeleteTicketRequest
 from src.core.ticket.application.use_cases.exceptions import (
+    RelatedEntitiesNotFound,
     TicketNotFound,
 )
 from src.core.ticket.application.use_cases.get_ticket import (
@@ -91,8 +93,13 @@ class TicketViewSet(viewsets.ViewSet):
             user_repository=ApiClientUserRepository(),
             category_repository=DjangoORMCategoryRepository())
         
-        output = use_case.execute(request=input)
-
+        try:
+            output = use_case.execute(request=input)
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE}
+            )
         return Response(
             status=HTTP_201_CREATED,
             data=CreateTicketResponseSerializer(output).data,
@@ -114,7 +121,12 @@ class TicketViewSet(viewsets.ViewSet):
             use_case.execute(request=input)
         except TicketNotFound:
             return Response(status=HTTP_404_NOT_FOUND)
-
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE}
+            )
+        
         return Response(status=HTTP_204_NO_CONTENT)
 
     def partial_update(self, request, pk: UUID = None):
@@ -135,7 +147,12 @@ class TicketViewSet(viewsets.ViewSet):
             use_case.execute(request=input)
         except TicketNotFound:
             return Response(status=HTTP_404_NOT_FOUND)
-
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE}
+            )
+        
         return Response(status=HTTP_204_NO_CONTENT)
 
     def destroy(self, request: Request, pk: UUID = None):

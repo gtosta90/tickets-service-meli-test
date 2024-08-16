@@ -1,4 +1,5 @@
 from abc import ABC
+from src import config
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 from uuid import UUID
@@ -23,7 +24,7 @@ class CategoryOutput:
 class ListCategoriesRequest:
     order_by: str = "name"
     current_page: int = 1
-
+    per_page: int = 10
 
 @dataclass
 class ListOutputMeta:
@@ -59,12 +60,11 @@ class ListCategories:
 
         new_ordered_categories = []
         for category_resp in ordered_categories:
-            print("entrou")
-            new_ordered_categories.append(_get_subcategories(self.repository ,category_resp))
+            _get_subcategories(self.repository ,category_resp)
+            new_ordered_categories.append(category_resp)
 
-        print(new_ordered_categories)
-        page_offset = (request.current_page - 1) * 10
-        categories_page = new_ordered_categories[page_offset:page_offset + 10]
+        page_offset = (request.current_page - 1) * request.per_page
+        categories_page = new_ordered_categories[page_offset:page_offset + request.per_page]
 
         print(categories_page)
         return ListCategoriesResponse(
@@ -78,27 +78,25 @@ class ListCategories:
                         created_at=category.created_at,
                         updated_at=category.updated_at,
                         is_active=category.is_active,
-                        subcategories=[]
+                        subcategories=category.subcategories
                     ) for category in categories_page
                 ],
                 key=lambda category: getattr(category, request.order_by),
             ),
             meta=ListOutputMeta(
                 current_page=request.current_page,
-                per_page=10,
+                per_page=request.per_page,
                 total=len(categories),
             ),
         )
-
+    
 def _get_subcategories(repo: CategoryRepository, category_resp: Category):
     subcategory_list = repo.list_by_relationship_id(category_resp.id)
-    category_resp.subcategories.append(subcategory_list)   
+    print(subcategory_list)
+    category_resp.subcategories = subcategory_list   
     if len(subcategory_list) > 0:
         #itera a lista recursivo
         for subcategory in subcategory_list:
-            print('entrou')
-            _get_subcategories(repo, subcategory)
-        
-        return category_resp
+            _get_subcategories(repo, subcategory)        
     else:
         return category_resp
