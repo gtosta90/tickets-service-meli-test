@@ -5,9 +5,10 @@ class TicketResponseSerializer(serializers.Serializer):
     id=serializers.UUIDField()
     title=serializers.CharField(max_length=100)
     user_create=serializers.IntegerField()
-    category=serializers.UUIDField(),
-    severity=serializers.IntegerField(),
-    description=serializers.CharField(max_length=1024),
+    category=serializers.UUIDField()
+    subcategory=serializers.UUIDField()
+    severity=serializers.IntegerField()
+    description=serializers.CharField(max_length=1024)
     created_at=serializers.DateTimeField()
     updated_at=serializers.DateTimeField()
     user_assigned=serializers.IntegerField()
@@ -36,6 +37,7 @@ class CreateTicketRequestSerializer(serializers.Serializer):
     title=serializers.CharField(max_length=100)
     user_create=serializers.IntegerField()
     category=serializers.UUIDField()
+    subcategory=serializers.UUIDField(allow_null=True)
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
     user_assigned=serializers.IntegerField()
@@ -50,6 +52,7 @@ class UpdateTicketRequestSerializer(serializers.Serializer):
     id = serializers.UUIDField(required=True)
     title=serializers.CharField(max_length=100)
     category=serializers.UUIDField()
+    subcategory=serializers.UUIDField()
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
     user_assigned=serializers.IntegerField()

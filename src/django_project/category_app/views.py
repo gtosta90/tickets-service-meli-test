@@ -8,6 +8,7 @@ from rest_framework.status import (
     HTTP_200_OK,
     HTTP_204_NO_CONTENT,
     HTTP_404_NOT_FOUND,
+    HTTP_406_NOT_ACCEPTABLE,
     HTTP_201_CREATED,
 )
 
@@ -19,6 +20,7 @@ from src.core.category.application.use_cases.create_category import (
 from src.core.category.application.use_cases.delete_category import DeleteCategory, DeleteCategoryRequest
 from src.core.category.application.use_cases.exceptions import (
     CategoryNotFound,
+    RelatedEntitiesNotFound,
 )
 from src.core.category.application.use_cases.get_category import (
     GetCategory,
@@ -83,7 +85,13 @@ class CategoryViewSet(viewsets.ViewSet):
 
         input = CreateCategoryRequest(**serializer.validated_data)
         use_case = CreateCategory(repository=DjangoORMCategoryRepository())
-        output = use_case.execute(request=input)
+
+        try:
+            output = use_case.execute(request=input)
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE})
 
         return Response(
             status=HTTP_201_CREATED,
@@ -103,6 +111,10 @@ class CategoryViewSet(viewsets.ViewSet):
             use_case.execute(request=input)
         except CategoryNotFound:
             return Response(status=HTTP_404_NOT_FOUND)
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE})
 
         return Response(status=HTTP_204_NO_CONTENT)
 
@@ -119,6 +131,10 @@ class CategoryViewSet(viewsets.ViewSet):
             use_case.execute(request=input)
         except CategoryNotFound:
             return Response(status=HTTP_404_NOT_FOUND)
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE})
 
         return Response(status=HTTP_204_NO_CONTENT)
 

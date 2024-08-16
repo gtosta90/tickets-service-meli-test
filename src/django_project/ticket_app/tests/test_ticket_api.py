@@ -4,9 +4,13 @@ from django.urls import reverse
 import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
+from core.category.domain.category import Category
 from src.core.ticket.domain.ticket import Ticket
 
 from src.django_project.ticket_app.repository import DjangoORMTicketRepository
+from src.django_project.category_app.repository import DjangoORMCategoryRepository
+from src.django_project.user_app.repository import ApiClientUserRepository
+
 
 @pytest.fixture
 def ticket_1():
@@ -37,6 +41,14 @@ def ticket_2():
 @pytest.fixture
 def ticket_repository() -> DjangoORMTicketRepository:
     return DjangoORMTicketRepository()
+
+@pytest.fixture
+def category_repository() -> DjangoORMCategoryRepository:
+    return DjangoORMCategoryRepository()
+
+@pytest.fixture
+def user_repository() -> ApiClientUserRepository:
+    return ApiClientUserRepository()
 
 
 @pytest.mark.django_db
@@ -89,16 +101,25 @@ class TestListAPI:
 class TestCreateAPI:
     def test_when_request_data_is_valid_severity_1_then_return_ticket(
         self,
-        ticket_repository: DjangoORMTicketRepository,
+        category_repository: DjangoORMCategoryRepository
     ) -> None:
+        
+        category = Category(
+            name= "Teste",
+            display_name= "Teste"
+        )
+
+        category_repository.save(category=category)
+
         url = reverse("ticket-list")
         data = {
                     "title": "Ticket 1",
                     "user_create": 1,
-                    "category": uuid4(),
+                    "category": category.id,
+                    "subcategory": None,
                     "severity": 1,
                     "description": "Ticket 1 Desc",
-                    "user_assigned": 0,
+                    "user_assigned": 1,
                     "status": "OPEN"
             }
         response = APIClient().post(url, data=data)
@@ -109,12 +130,22 @@ class TestCreateAPI:
     def test_when_request_data_is_valid_then_return_ticket(
         self,
         ticket_repository: DjangoORMTicketRepository,
+        category_repository: DjangoORMCategoryRepository
     ) -> None:
+        
+        category = Category(
+            name= "Teste",
+            display_name= "Teste"
+        )
+
+        category_repository.save(category=category)
+    
         url = reverse("ticket-list")
         data = {
                     "title": "Ticket 1",
                     "user_create": 1,
-                    "category": uuid4(),
+                    "category": category.id,
+                    "subcategory": None,
                     "severity": 2,
                     "description": "Ticket 1 Desc",
                     "user_assigned": 0,

@@ -55,6 +55,5 @@ def _get_subcategories(repo: CategoryRepository, category_resp: GetCategoryRespo
         #itera a lista recursivo
         for subcategory in subcategory_list:
             _get_subcategories(repo, subcategory)
-        return category_resp
     else:
         return category_resp

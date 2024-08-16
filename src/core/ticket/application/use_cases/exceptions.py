@@ -4,3 +4,7 @@ class InvalidTicket(Exception):
 
 class TicketNotFound(Exception):
     pass
+
+
+class RelatedEntitiesNotFound(Exception):
+    pass

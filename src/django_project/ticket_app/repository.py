@@ -31,6 +31,7 @@ class DjangoORMTicketRepository(TicketRepository):
         self.model.objects.filter(pk=ticket.id).update(
             title=ticket.title,
             category=ticket.category,
+            subcategory=ticket.subcategory,
             severity=ticket.severity,
             description=ticket.description,
             user_assigned=ticket.user_assigned,
@@ -46,6 +47,7 @@ class TicketModelMapper:
             title=model.title,
             user_create=model.user_create,
             category=model.category,
+            subcategory=model.subcategory,
             severity=model.severity,
             description=model.description,
             created_at=model.created_at,
@@ -61,6 +63,7 @@ class TicketModelMapper:
             title=entity.title,
             user_create=entity.user_create,
             category=entity.category,
+            subcategory=entity.subcategory,
             severity=entity.severity,
             description=entity.description,
             created_at=entity.created_at,

@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 
 from django.shortcuts import render
@@ -14,12 +15,15 @@ from rest_framework.status import (
 
 
 from core.category.application.use_cases.exceptions import InvalidCategory
+from django_project.category_app.repository import DjangoORMCategoryRepository
+from django_project.user_app.repository import ApiClientUserRepository
 from src.core.ticket.application.use_cases.create_ticket import (
     CreateTicket,
     CreateTicketRequest,
 )
 from src.core.ticket.application.use_cases.delete_ticket import DeleteTicket, DeleteTicketRequest
 from src.core.ticket.application.use_cases.exceptions import (
+    RelatedEntitiesNotFound,
     TicketNotFound,
 )
 from src.core.ticket.application.use_cases.get_ticket import (
@@ -84,9 +88,18 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = CreateTicketRequest(**serializer.validated_data)
-        use_case = CreateTicket(repository=DjangoORMTicketRepository())
-        output = use_case.execute(request=input)
-
+        use_case = CreateTicket(            
+            ticket_repository=DjangoORMTicketRepository(),
+            user_repository=ApiClientUserRepository(),
+            category_repository=DjangoORMCategoryRepository())
+        
+        try:
+            output = use_case.execute(request=input)
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE}
+            )
         return Response(
             status=HTTP_201_CREATED,
             data=CreateTicketResponseSerializer(output).data,
@@ -100,12 +113,20 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = UpdateTicketRequest(**serializer.validated_data)
-        use_case = UpdateTicket(repository=DjangoORMTicketRepository())
+        use_case = UpdateTicket(
+            ticket_repository=DjangoORMTicketRepository(),
+            user_repository=ApiClientUserRepository(),
+            category_repository=DjangoORMCategoryRepository())
         try:
             use_case.execute(request=input)
         except TicketNotFound:
             return Response(status=HTTP_404_NOT_FOUND)
-
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE}
+            )
+        
         return Response(status=HTTP_204_NO_CONTENT)
 
     def partial_update(self, request, pk: UUID = None):
@@ -116,12 +137,22 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = UpdateTicketRequest(**serializer.validated_data)
-        use_case = UpdateTicket(repository=DjangoORMTicketRepository())
+        
+        use_case = UpdateTicket(            
+            ticket_repository=DjangoORMTicketRepository(),
+            user_repository=ApiClientUserRepository(),
+            category_repository=DjangoORMCategoryRepository())
+        
         try:
             use_case.execute(request=input)
         except TicketNotFound:
             return Response(status=HTTP_404_NOT_FOUND)
-
+        except RelatedEntitiesNotFound as error:
+            return Response(
+                status=HTTP_406_NOT_ACCEPTABLE,
+                data= {'error': error.__str__(), 'status': HTTP_406_NOT_ACCEPTABLE}
+            )
+        
         return Response(status=HTTP_204_NO_CONTENT)
 
     def destroy(self, request: Request, pk: UUID = None):

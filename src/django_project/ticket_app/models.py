@@ -9,6 +9,7 @@ class Ticket(models.Model):
     title=models.CharField(max_length=100)
     user_create=models.IntegerField()
     category=models.UUIDField()
+    subcategory=models.UUIDField(default=None, null=True)
     severity=models.IntegerField()
     description=models.CharField(max_length=1024)
     created_at=models.DateTimeField(default=datetime.datetime.now)

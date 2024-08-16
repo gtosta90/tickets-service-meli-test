@@ -10,11 +10,12 @@ from src.core.ticket.domain.value_objects import Level
 
 
 class TestDeleteTicket:
-    def test_delete_tivket_from_repository(self):
+    def test_delete_ticket_from_repository(self):
         ticket = Ticket(
             title="Ticket 1",
             user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
         mock_repository = create_autospec(TicketRepository)

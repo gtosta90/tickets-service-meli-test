@@ -1,62 +1,145 @@
 src
-└── core
-    ├── category
-    │   ├── application
-    │   │   └── use_cases
-    │   │       ├── create_category.py
-    │   │       ├── delete_category.py
-    │   │       ├── exceptions.py
-    │   │       ├── get_category.py
-    │   │       ├── list_categories.py
-    │   │       └── update_category.py
-    │   ├── domain
-    │   │   ├── category.py
-    │   │   └── category_repository.py
-    │   ├── infra
-    │   │   └── in_memory_category_repository.py
-    │   └── tests
-    │       ├── application
-    │       │   ├── __init__.py
-    │       │   └── use_cases
-    │       │       ├── __init__.py
-    │       │       ├── integration
-    │       │       └── unit
-    │       │           ├── __init__.py
-    │       │           ├── test_create_category.py
-    │       │           ├── test_delete_category.py
-    │       │           ├── test_get_category.py
-    │       │           ├── test_list_category.py
-    │       │           └── test_update_category.py
-    │       ├── domain
-    │       │   ├── __init__.py
-    │       │   └── test_category.py
-    │       └── __init__.py
-    └── ticket
-        ├── application
-        │   └── use_cases
-        │       ├── create_ticket.py
-        │       ├── delete_ticket.py
-        │       ├── exceptions.py
-        │       ├── get_ticket.py
-        │       ├── list_tickets.py
-        │       └── update_ticket.py
-        ├── domain
-        │   ├── ticket.py
-        │   ├── ticket_repository.py
-        │   └── value_objects.py
-        ├── infra
-        │   └── in_memory_ticket_repository.py
-        └── tests
-            ├── application
-            │   └── use_cases
-            │       ├── integration
-            │       └── unit
-            │           ├── __init__.py
-            │           ├── test_create_ticket.py
-            │           ├── test_delete_ticket.py
-            │           ├── test_get_ticket.py
-            │           ├── test_list_ticket.py
-            │           └── test_update_ticket.py
-            └── domain
-                ├── __init__.py
-                └── test_ticket.py
+├── config.py
+├── core
+│   ├── category
+│   │   ├── application
+│   │   │   └── use_cases
+│   │   │       ├── create_category.py
+│   │   │       ├── delete_category.py
+│   │   │       ├── exceptions.py
+│   │   │       ├── get_category.py
+│   │   │       ├── list_categories.py
+│   │   │       ├── update_category.py
+│   │   │       └── validates.py
+│   │   ├── domain
+│   │   │   ├── category.py
+│   │   │   └── category_repository.py
+│   │   ├── infra
+│   │   │   └── in_memory_category_repository.py
+│   │   └── tests
+│   │       ├── application
+│   │       │   ├── __init__.py
+│   │       │   └── use_cases
+│   │       │       ├── __init__.py
+│   │       │       ├── integration
+│   │       │       │   ├── __init__.py
+│   │       │       │   ├── test_create_category.py
+│   │       │       │   ├── test_get_category.py
+│   │       │       │   ├── test_list_category.py
+│   │       │       │   └── test_update_category.py
+│   │       │       └── unit
+│   │       │           ├── __init__.py
+│   │       │           ├── test_create_category.py
+│   │       │           ├── test_delete_category.py
+│   │       │           ├── test_get_category.py
+│   │       │           ├── test_list_category.py
+│   │       │           └── test_update_category.py
+│   │       ├── domain
+│   │       │   ├── __init__.py
+│   │       │   └── test_category.py
+│   │       └── __init__.py
+│   ├── _shared
+│   │   ├── domain
+│   │   │   ├── entity.py
+│   │   │   ├── __init__.py
+│   │   │   └── notification.py
+│   │   └── __init__.py
+│   ├── ticket
+│   │   ├── application
+│   │   │   └── use_cases
+│   │   │       ├── create_ticket.py
+│   │   │       ├── delete_ticket.py
+│   │   │       ├── exceptions.py
+│   │   │       ├── get_ticket.py
+│   │   │       ├── list_tickets.py
+│   │   │       ├── update_ticket.py
+│   │   │       └── validates.py
+│   │   ├── domain
+│   │   │   ├── ticket.py
+│   │   │   ├── ticket_repository.py
+│   │   │   └── value_objects.py
+│   │   ├── infra
+│   │   │   └── in_memory_ticket_repository.py
+│   │   └── tests
+│   │       ├── application
+│   │       │   └── use_cases
+│   │       │       ├── integration
+│   │       │       └── unit
+│   │       │           ├── __init__.py
+│   │       │           ├── test_create_ticket.py
+│   │       │           ├── test_delete_ticket.py
+│   │       │           ├── test_get_ticket.py
+│   │       │           ├── test_list_ticket.py
+│   │       │           └── test_update_ticket.py
+│   │       └── domain
+│   │           ├── __init__.py
+│   │           └── test_ticket.py
+│   └── user
+│       ├── application
+│       │   └── use_cases
+│       │       ├── exceptions.py
+│       │       ├── get_user.py
+│       │       └── list_user.py
+│       └── domain
+│           ├── user.py
+│           └── user_repository.py
+├── django_project
+│   ├── asgi.py
+│   ├── category_app
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   ├── 0002_alter_category_updated_at.py
+│   │   │   ├── 0003_alter_category_updated_at.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── repository.py
+│   │   ├── serializers.py
+│   │   ├── tests
+│   │   │   ├── __init__.py
+│   │   │   ├── test_category_api.py
+│   │   │   ├── test_category_repository.py
+│   │   │   └── test_category_serializers.py
+│   │   └── views.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── ticket_app
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   ├── 0002_alter_ticket_user_assigned.py
+│   │   │   ├── 0003_alter_ticket_user_assigned.py
+│   │   │   ├── 0004_alter_ticket_user_assigned.py
+│   │   │   ├── 0005_alter_ticket_user_assigned_alter_ticket_user_create.py
+│   │   │   ├── 0006_ticket_subcategory.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── repository.py
+│   │   ├── serializers.py
+│   │   ├── tests
+│   │   │   ├── __init__.py
+│   │   │   ├── test_ticket_api.py
+│   │   │   ├── test_ticket_repository.py
+│   │   │   └── test_ticket_serializers.py
+│   │   └── views.py
+│   ├── urls.py
+│   ├── user_app
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── repository.py
+│   │   ├── serializers.py
+│   │   ├── tests
+│   │   │   ├── test_user_api.py
+│   │   │   └── test_user_repository.py
+│   │   ├── tests.py
+│   │   └── views.py
+│   └── wsgi.py
+└── __init__.py

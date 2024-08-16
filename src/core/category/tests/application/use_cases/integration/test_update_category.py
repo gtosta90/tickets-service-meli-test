@@ -26,7 +26,7 @@ class TestUpdateCategory:
             id=category.id,
             name="KITS1",
             display_name="KITS1",
-            relationship_id = uuid.uuid4(),
+            relationship_id = category.id,
             is_active=False,
         )
         response = use_case.execute(request)

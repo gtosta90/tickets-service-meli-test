@@ -80,8 +80,6 @@ class TestListCategories:
         use_case = ListCategories(repository=mock_populated_repository)
         response = use_case.execute(request=ListCategoriesRequest())
 
-        print(response)
-
         assert response == ListCategoriesResponse(
             data=[
                 CategoryOutput(
@@ -92,7 +90,7 @@ class TestListCategories:
                     created_at=category_1.created_at,
                     updated_at=category_1.updated_at,
                     is_active=category_1.is_active,
-                    subcategories=[]
+                    subcategories=category_1.subcategories
                 ),
                 CategoryOutput(
                     id=category_2.id,
@@ -102,7 +100,7 @@ class TestListCategories:
                     created_at=category_2.created_at,
                     updated_at=category_2.updated_at,
                     is_active=category_2.is_active,
-                    subcategories=[]
+                    subcategories=category_2.subcategories
                 ),
                 CategoryOutput(
                     id=category_3.id,
@@ -112,7 +110,7 @@ class TestListCategories:
                     created_at=category_3.created_at,
                     updated_at=category_3.updated_at,
                     is_active=category_3.is_active,
-                    subcategories=[]
+                    subcategories=category_3.subcategories
                 )
             ],
             meta=ListOutputMeta(
