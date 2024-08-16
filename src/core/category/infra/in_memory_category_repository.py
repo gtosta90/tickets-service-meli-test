@@ -1,3 +1,4 @@
+from typing import List
 from uuid import UUID
 from src.core.category.domain.category_repository import CategoryRepository
 from src.core.category.domain.category import Category
@@ -14,14 +15,17 @@ class InMemoryCategoryRepository(CategoryRepository):
         return next(
             (category for category in self.categories if category.id == id), None
         )
-
+    
     def delete(self, id: UUID) -> None:
         category = self.get_by_id(id)
         if category:
             self.categories.remove(category)
 
     def list(self) -> list[Category]:
-        return [category for category in self.categories]
+        return [category for category in self.categories if category.relationship_id == ""]
+    
+    def list_by_relationship_id(self, id: UUID) -> List[Category]:
+        return [category for category in self.categories if category.relationship_id == id]
 
     def update(self, category: Category) -> None:
         old_category = self.get_by_id(category.id)

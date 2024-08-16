@@ -19,8 +19,9 @@ class TestListTickets:
         return Ticket(
             title="Ticket 1",
             description="Ticket 1 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
 
@@ -29,8 +30,9 @@ class TestListTickets:
         return Ticket(
             title="Ticket 2",
             description="Ticket 2 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
 
@@ -39,8 +41,9 @@ class TestListTickets:
         return Ticket(
             title="Ticket 3",
             description="Ticket 3 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH
         )
 
@@ -76,7 +79,7 @@ class TestListTickets:
             data=[],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=0,
             ),
         )
@@ -98,6 +101,7 @@ class TestListTickets:
                     title=ticket_1.title,
                     user_create=ticket_1.user_create,
                     category=ticket_1.category,
+                    subcategory=ticket_1.subcategory,
                     severity=ticket_1.severity,
                     description=ticket_1.description,
                     created_at=ticket_1.created_at,
@@ -110,17 +114,31 @@ class TestListTickets:
                     title=ticket_2.title,
                     user_create=ticket_2.user_create,
                     category=ticket_2.category,
+                    subcategory=ticket_2.subcategory,
                     severity=ticket_2.severity,
                     description=ticket_2.description,
                     created_at=ticket_2.created_at,
                     updated_at=ticket_2.updated_at,
                     user_assigned=ticket_2.user_assigned,
                     status=ticket_2.status,
+                ),
+                TicketOutput(
+                    id=ticket_3.id,
+                    title=ticket_3.title,
+                    user_create=ticket_3.user_create,
+                    category=ticket_3.category,
+                    subcategory=ticket_3.subcategory,
+                    severity=ticket_3.severity,
+                    description=ticket_3.description,
+                    created_at=ticket_3.created_at,
+                    updated_at=ticket_3.updated_at,
+                    user_assigned=ticket_3.user_assigned,
+                    status=ticket_3.status,
                 )
             ],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
@@ -133,7 +151,7 @@ class TestListTickets:
             data=[],
             meta=ListOutputMeta(
                 current_page=3,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
@@ -147,23 +165,10 @@ class TestListTickets:
         response = use_case.execute(request=ListTicketsRequest(current_page=2))
 
         assert response == ListTicketsResponse(
-            data=[
-                TicketOutput(
-                    id=ticket_3.id,
-                    title=ticket_3.title,
-                    user_create=ticket_3.user_create,
-                    category=ticket_3.category,
-                    severity=ticket_3.severity,
-                    description=ticket_3.description,
-                    created_at=ticket_3.created_at,
-                    updated_at=ticket_3.updated_at,
-                    user_assigned=ticket_3.user_assigned,
-                    status=ticket_3.status,
-                )
-            ],
+            data=[],
             meta=ListOutputMeta(
                 current_page=2,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )

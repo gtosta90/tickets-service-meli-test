@@ -65,7 +65,7 @@ class TestListCategories:
             data=[],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=0,
             ),
         )
@@ -80,8 +80,6 @@ class TestListCategories:
         use_case = ListCategories(repository=mock_populated_repository)
         response = use_case.execute(request=ListCategoriesRequest())
 
-        print(response)
-
         assert response == ListCategoriesResponse(
             data=[
                 CategoryOutput(
@@ -92,7 +90,7 @@ class TestListCategories:
                     created_at=category_1.created_at,
                     updated_at=category_1.updated_at,
                     is_active=category_1.is_active,
-                    subcategories=[]
+                    subcategories=category_1.subcategories
                 ),
                 CategoryOutput(
                     id=category_2.id,
@@ -102,12 +100,22 @@ class TestListCategories:
                     created_at=category_2.created_at,
                     updated_at=category_2.updated_at,
                     is_active=category_2.is_active,
-                    subcategories=[]
+                    subcategories=category_2.subcategories
+                ),
+                CategoryOutput(
+                    id=category_3.id,
+                    name=category_3.name,
+                    display_name=category_3.display_name,
+                    relationship_id=category_3.relationship_id,
+                    created_at=category_3.created_at,
+                    updated_at=category_3.updated_at,
+                    is_active=category_3.is_active,
+                    subcategories=category_3.subcategories
                 )
             ],
             meta=ListOutputMeta(
                 current_page=1,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
@@ -120,7 +128,7 @@ class TestListCategories:
             data=[],
             meta=ListOutputMeta(
                 current_page=3,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )
@@ -128,27 +136,16 @@ class TestListCategories:
     def test_fetch_last_page_with_elements(
         self,
         mock_populated_repository: CategoryRepository,
-        category_3: Category,  # Foi "empurrado" para última página
+        category_3: Category,
     ) -> None:
         use_case = ListCategories(repository=mock_populated_repository)
         response = use_case.execute(request=ListCategoriesRequest(current_page=2))
 
         assert response == ListCategoriesResponse(
-            data=[
-                CategoryOutput(
-                    id=category_3.id,
-                    name=category_3.name,
-                    display_name=category_3.display_name,
-                    relationship_id=category_3.relationship_id,
-                    created_at=category_3.created_at,
-                    updated_at=category_3.updated_at,
-                    is_active=category_3.is_active,
-                    subcategories=[]
-                )
-            ],
+            data=[],
             meta=ListOutputMeta(
                 current_page=2,
-                per_page=2,
+                per_page=10,
                 total=3,
             ),
         )

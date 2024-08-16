@@ -20,6 +20,7 @@ class TestUpdateCategory:
     def mock_repository(self, category: Category) -> CategoryRepository:
         repository = create_autospec(CategoryRepository, instance=True)
         repository.get_by_id.return_value = category
+        repository.list.return_value = [category]
         return repository
 
     def test_update_category_name_and_display_name(
@@ -47,10 +48,10 @@ class TestUpdateCategory:
         relationship_id = uuid.uuid4()
         use_case.execute(UpdateCategoryRequest(
             id=category.id,
-            relationship_id=relationship_id
+            relationship_id=category.id
         ))
 
-        assert category.relationship_id == relationship_id
+        assert category.relationship_id == category.id
         mock_repository.update.assert_called_once_with(category)
 
     def test_activate_category(

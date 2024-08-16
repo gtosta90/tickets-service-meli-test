@@ -16,8 +16,9 @@ class TestGetTicket:
         mock_category = Ticket(
             title="Ticket 1",
             description="Ticket 1 Desc",
-            user_create=uuid.uuid4(),
+            user_create=1,
             category=uuid.uuid4(),
+            subcategory=None,
             severity=Level.HIGH,
             status=Status.OPEN
         )
@@ -34,6 +35,7 @@ class TestGetTicket:
                 title="Ticket 1",
                 user_create=mock_category.user_create,
                 category=mock_category.category,
+                subcategory=None,
                 severity=Level.HIGH,
                 description="Ticket 1 Desc",
                 created_at=mock_category.created_at,

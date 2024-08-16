@@ -1,4 +1,5 @@
 from abc import ABC
+from src import config
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 from uuid import UUID
@@ -11,13 +12,14 @@ from src.core.ticket.domain.value_objects import Level, Status
 class TicketOutput:
     id: UUID
     title: str
-    user_create: UUID
+    user_create: int
     category: UUID
+    subcategory: UUID
     severity: Level
     description: str
     created_at: datetime
     updated_at: datetime
-    user_assigned: UUID
+    user_assigned: int
     status: Status
 
 
@@ -25,12 +27,12 @@ class TicketOutput:
 class ListTicketsRequest:
     order_by: str = "title"
     current_page: int = 1
-
+    per_page: int = 10
 
 @dataclass
 class ListOutputMeta:
     current_page: int = 1
-    per_page: int = 2
+    per_page: int = 10
     total: int = 0
 
 
@@ -58,8 +60,8 @@ class ListTickets:
             tickets,
             key=lambda ticket: getattr(ticket, request.order_by),
         )
-        page_offset = (request.current_page - 1) * 2
-        tickets_page = ordered_tickets[page_offset:page_offset + 2]
+        page_offset = (request.current_page - 1) * request.per_page
+        tickets_page = ordered_tickets[page_offset:page_offset + request.per_page]
 
         return ListTicketsResponse(
             data=sorted(
@@ -69,6 +71,7 @@ class ListTickets:
                         title=ticket.title,
                         user_create=ticket.user_create,
                         category=ticket.category,
+                        subcategory=ticket.subcategory,
                         severity=ticket.severity,
                         description=ticket.description,
                         created_at=ticket.created_at,
@@ -81,7 +84,7 @@ class ListTickets:
             ),
             meta=ListOutputMeta(
                 current_page=request.current_page,
-                per_page=2,
+                per_page=request.per_page,
                 total=len(tickets),
             ),
         )
