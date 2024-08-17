@@ -1,6 +1,8 @@
 from uuid import UUID
 
 from django.shortcuts import render
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -32,7 +34,20 @@ from src.django_project.user_app.serializers import (
     RetrieveUserResponseSerializer,
 )
 
+
 class UserViewSet(viewsets.ViewSet):
+    """
+        List Users
+    """
+    @swagger_auto_schema(
+        operation_description="Lista todos os usuários do Sistema",
+        responses={
+            200: ListUsersResponseSerializer,
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def list(self, request: Request) -> Response:
         order_by = request.query_params.get("order_by", "name")
         use_case = ListUsers(repository=ApiClientUserRepository())
@@ -46,7 +61,18 @@ class UserViewSet(viewsets.ViewSet):
             status=HTTP_200_OK,
             data=response_serializer.data,
         )
-
+    """
+        Get User
+    """
+    @swagger_auto_schema(
+        operation_description="Recupera um usuário pelo ID",
+        responses={
+            200: RetrieveUserResponseSerializer,
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def retrieve(self, request: Request, pk: UUID = None) -> Response:
         serializer = RetrieveUserRequestSerializer(data={"id": pk})
         serializer.is_valid(raise_exception=True)
