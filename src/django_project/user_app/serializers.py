@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django_project._shared import meta_serializer
 
 
 class UserResponseSerializer(serializers.Serializer):
@@ -7,15 +8,9 @@ class UserResponseSerializer(serializers.Serializer):
     username=serializers.CharField()
     email=serializers.CharField()
 
-class ListOutputMetaSerializer(serializers.Serializer):
-    current_page = serializers.IntegerField()
-    per_page = serializers.IntegerField()
-    total = serializers.IntegerField()
-
-
 class ListUsersResponseSerializer(serializers.Serializer):
     data = UserResponseSerializer(many=True)
-    meta = ListOutputMetaSerializer()
+    meta = meta_serializer.ListOutputMetaSerializer()
 
 
 class RetrieveUserRequestSerializer(serializers.Serializer):
