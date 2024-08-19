@@ -66,7 +66,6 @@ class ListCategories:
         page_offset = (request.current_page - 1) * request.per_page
         categories_page = new_ordered_categories[page_offset:page_offset + request.per_page]
 
-        print(categories_page)
         return ListCategoriesResponse(
             data=sorted(
                 [
@@ -92,7 +91,6 @@ class ListCategories:
     
 def _get_subcategories(repo: CategoryRepository, category_resp: Category):
     subcategory_list = repo.list_by_relationship_id(category_resp.id)
-    print(subcategory_list)
     category_resp.subcategories = subcategory_list   
     if len(subcategory_list) > 0:
         #itera a lista recursivo
