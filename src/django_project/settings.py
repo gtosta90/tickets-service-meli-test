@@ -93,7 +93,7 @@ print(f"{BASE_DIR}/{os.environ.get("DB_NAME")}")
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get("DB_ENGINE"),
-        'NAME': f"{BASE_DIR}/{os.environ.get("DB_NAME")}",
+        'NAME': os.environ.get("DB_NAME"),
         'USER': os.environ.get("DB_USER"),
         'PASSWORD': os.environ.get("DB_PASSWORD"),
         'HOST': os.environ.get("DB_HOST"),
