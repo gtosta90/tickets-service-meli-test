@@ -46,11 +46,11 @@ class TestTicket:
         assert ticket.title == "aaa"
         assert ticket.description == "aaaa"
         assert ticket.created_at is not None
-        assert ticket.status == "OPEN"
+        assert ticket.status == 1
 
     def test_create_ticket_as_open_by_default(self):
         ticket = Ticket(title="aaa", category=uuid.uuid4(), user_create=uuid.uuid4(), severity=Level.ISSUE_HIGH)
-        assert ticket.status == "OPEN"
+        assert ticket.status == 1
 
     def test_create_category_with_provided_values(self):
         ticket_id = uuid.uuid4()

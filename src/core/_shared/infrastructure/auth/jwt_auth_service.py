@@ -1,6 +1,5 @@
 import os
 
-import dotenv
 import jwt
 
 from src.core._shared.infrastructure.auth.auth_interface import AuthService
@@ -12,7 +11,9 @@ class JwtAuthService(AuthService):
 
     def _decode_token(self) -> dict:
         try:
-            return jwt.decode(self.token, self.public_key, algorithms=["RS256"], audience="account")
+            public_key = f'-----BEGIN PUBLIC KEY-----\n{self.public_key}\n-----END PUBLIC KEY-----\n'
+            # import ipdb; ipdb.set_trace()
+            return jwt.decode(self.token, public_key, algorithms=["RS256"], audience="account")
         except jwt.PyJWTError:
             return {}
 

@@ -24,6 +24,7 @@ from src.core.user.application.use_cases.list_user import (
     ListUsersRequest,
     ListUsersResponse,
 )
+from src.django_project.permissions import IsAdmin, IsAuthenticated
 from src.django_project.user_app.repository import ApiClientUserRepository
 
 from src.django_project.user_app.serializers import (
@@ -34,6 +35,7 @@ from src.django_project.user_app.serializers import (
 
 
 class UserViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
     """
         List Users
     """
@@ -47,11 +49,15 @@ class UserViewSet(viewsets.ViewSet):
         }
     )
     def list(self, request: Request) -> Response:
-        order_by = request.query_params.get("order_by", "name")
+        order_by = request.query_params.get("order_by", "id")
+        per_page = int(request.query_params.get("per_page", 10))
+        current_page = int(request.query_params.get("current_page", 1))
+
         use_case = ListUsers(repository=ApiClientUserRepository())
         output: ListUsersResponse = use_case.execute(request=ListUsersRequest(
             order_by=order_by,
-            current_page=int(request.query_params.get("current_page", 1)),
+            current_page=current_page,
+            per_page=per_page
         ))
         response_serializer = ListUsersResponseSerializer(output)
 
@@ -74,7 +80,7 @@ class UserViewSet(viewsets.ViewSet):
     def retrieve(self, request: Request, pk: UUID = None) -> Response:
         serializer = RetrieveUserRequestSerializer(data={"id": pk})
         serializer.is_valid(raise_exception=True)
-
+        # import ipdb; ipdb.set_trace()
         input = GetUserRequest(**serializer.validated_data)
         use_case = GetUser(repository=ApiClientUserRepository())
 

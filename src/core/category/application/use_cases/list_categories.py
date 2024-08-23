@@ -60,7 +60,7 @@ class ListCategories:
 
         new_ordered_categories = []
         for category_resp in ordered_categories:
-            _get_subcategories(self.repository ,category_resp)
+            self._get_subcategories(self.repository ,category_resp)
             new_ordered_categories.append(category_resp)
 
         page_offset = (request.current_page - 1) * request.per_page
@@ -89,12 +89,12 @@ class ListCategories:
             ),
         )
     
-def _get_subcategories(repo: CategoryRepository, category_resp: Category):
-    subcategory_list = repo.list_by_relationship_id(category_resp.id)
-    category_resp.subcategories = subcategory_list   
-    if len(subcategory_list) > 0:
-        #itera a lista recursivo
-        for subcategory in subcategory_list:
-            _get_subcategories(repo, subcategory)        
-    else:
-        return category_resp
+    def _get_subcategories(self, repo: CategoryRepository, category_resp: Category):
+        subcategory_list = repo.list_by_relationship_id(category_resp.id)
+        category_resp.subcategories = subcategory_list   
+        if len(subcategory_list) > 0:
+            #itera a lista recursivo
+            for subcategory in subcategory_list:
+                self._get_subcategories(repo, subcategory)        
+        else:
+            return category_resp

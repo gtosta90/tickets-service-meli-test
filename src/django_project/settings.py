@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 #         'PORT': '5433',
 #     }
 # }
-print(f"{BASE_DIR}/{os.environ.get("DB_NAME")}")
+
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get("DB_ENGINE"),
