@@ -1,4 +1,5 @@
 
+import logging
 from dataclasses import dataclass
 from typing import Set
 from uuid import UUID
@@ -22,6 +23,7 @@ class UpdateTicketRequest:
     status: int | None = None
 
 class UpdateTicket:
+    logger = logging.getLogger('tickets-service')
     def __init__(
                 self, 
                 ticket_repository: TicketRepository,
@@ -87,7 +89,8 @@ class UpdateTicket:
                 severity=current_severity,
                 status=Status(current_status).name
             )
-        except ValueError as error:
-            raise InvalidTicket(error)
+        except ValueError as err:
+            self.logger.error(err)
+            raise InvalidTicket(err)
 
         self._ticket_repository.update(ticket)

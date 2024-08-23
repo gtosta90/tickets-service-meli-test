@@ -1,3 +1,4 @@
+import logging
 from abc import ABC
 from src import config
 from dataclasses import dataclass, field
@@ -48,6 +49,7 @@ class ListCategoriesResponse(ListOutput[CategoryOutput]):
 
 
 class ListCategories:
+    logger = logging.getLogger('tickets-service')
     def __init__(self, repository: CategoryRepository) -> None:
         self.repository = repository
 
@@ -57,11 +59,14 @@ class ListCategories:
             categories,
             key=lambda category: getattr(category, request.order_by),
         )
-
-        new_ordered_categories = []
-        for category_resp in ordered_categories:
-            self._get_subcategories(self.repository ,category_resp)
-            new_ordered_categories.append(category_resp)
+        try:
+            new_ordered_categories = []
+            for category_resp in ordered_categories:
+                self._get_subcategories(self.repository ,category_resp)
+                new_ordered_categories.append(category_resp)
+        except ValueError as err:
+            self.logger.error(err)
+            raise ValueError
 
         page_offset = (request.current_page - 1) * request.per_page
         categories_page = new_ordered_categories[page_offset:page_offset + request.per_page]

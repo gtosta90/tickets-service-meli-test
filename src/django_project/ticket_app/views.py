@@ -1,4 +1,5 @@
 import json
+import logging
 from uuid import UUID
 
 from drf_yasg.utils import swagger_auto_schema
@@ -53,6 +54,7 @@ from src.django_project.ticket_app.serializers import (
 )
 
 class TicketViewSet(viewsets.ViewSet):
+    logger = logging.getLogger('tickets-service')
     """
         List Tickets
     """
@@ -66,6 +68,7 @@ class TicketViewSet(viewsets.ViewSet):
         }
     )
     def list(self, request: Request) -> Response:
+        self.logger.debug(request)
         order_by = request.query_params.get("order_by", "title")
         current_page = int(request.query_params.get("current_page", 1))
         per_page = int(request.query_params.get("per_page", 10))
@@ -95,6 +98,7 @@ class TicketViewSet(viewsets.ViewSet):
         }
     )
     def retrieve(self, request: Request, pk: UUID = None) -> Response:
+        self.logger.debug(request)
         serializer = RetrieveTicketRequestSerializer(data={"id": pk})
         serializer.is_valid(raise_exception=True)
 
@@ -138,6 +142,7 @@ class TicketViewSet(viewsets.ViewSet):
         }
     )
     def create(self, request: Request) -> Response:
+        self.logger.debug(request)
         serializer = CreateTicketRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -173,6 +178,7 @@ class TicketViewSet(viewsets.ViewSet):
         }
     )
     def update(self, request: Request, pk: UUID = None):
+        self.logger.debug(request)
         serializer = UpdateTicketRequestSerializer(data={
             **request.data,
             "id": pk,
@@ -211,6 +217,7 @@ class TicketViewSet(viewsets.ViewSet):
         }
     )
     def partial_update(self, request, pk: UUID = None):
+        self.logger.debug(request)
         serializer = UpdateTicketRequestSerializer(data={
             **request.data,
             "id": pk,
@@ -250,6 +257,7 @@ class TicketViewSet(viewsets.ViewSet):
         }
     )
     def destroy(self, request: Request, pk: UUID = None):
+        self.logger.debug(request)
         request_data = DeleteTicketRequestSerializer(data={"id": pk})
         request_data.is_valid(raise_exception=True)
 

@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from typing import Set
 from uuid import UUID
@@ -20,6 +21,7 @@ class CreateCategoryResponse:
     id: UUID
 
 class CreateCategory:
+    logger = logging.getLogger('tickets-service')
     def __init__(self, repository: CategoryRepository):
         self._repository = repository
 
@@ -29,6 +31,7 @@ class CreateCategory:
         notification.add_errors(validates.validate_relationship_category(category_id=None, relationship_id=request.relationship_id, category_repository=self._repository))
 
         if notification.has_errors:
+            self.logger.warning(notification.messages)
             raise RelatedEntitiesNotFound(notification.messages)
     
         try:
@@ -39,6 +42,7 @@ class CreateCategory:
                 is_active = request.is_active
             )
         except ValueError as err:
+            self.logger.error(err)
             raise InvalidCategory(err)
 
         self._repository.save(category)

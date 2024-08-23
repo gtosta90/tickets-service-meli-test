@@ -1,5 +1,5 @@
+import logging
 from dataclasses import dataclass
-import datetime
 from typing import Set
 from uuid import UUID, uuid4
 from src import config
@@ -30,6 +30,7 @@ class CreateTicketResponse:
     message: str
 
 class CreateTicket:
+    logger = logging.getLogger('tickets-service')
     def __init__(
             self, 
             ticket_repository: TicketRepository,
@@ -71,6 +72,7 @@ class CreateTicket:
                 status=Status(request.status).name
             )
         except ValueError as err:
+            self.logger.error(err)
             raise InvalidTicket(err)
 
         self._ticket_repository.save(ticket)
