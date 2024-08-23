@@ -1,7 +1,8 @@
 import json
 from uuid import UUID
 
-from django.shortcuts import render
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -38,6 +39,7 @@ from src.core.ticket.application.use_cases.list_tickets import (
 )
 from src.core.ticket.application.use_cases.update_ticket import UpdateTicket, UpdateTicketRequest
 from src.django_project.ticket_app.repository import DjangoORMTicketRepository
+from src.django_project.category_app.repository import DjangoORMCategoryRepository
 
 from src.django_project.ticket_app.serializers import (
     CreateTicketRequestSerializer,
@@ -51,12 +53,28 @@ from src.django_project.ticket_app.serializers import (
 )
 
 class TicketViewSet(viewsets.ViewSet):
+    """
+        List Tickets
+    """
+    @swagger_auto_schema(
+        operation_description="Lista todos os tickets do Sistema",
+        responses={
+            200: ListTicketsResponseSerializer,
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def list(self, request: Request) -> Response:
         order_by = request.query_params.get("order_by", "title")
-        use_case = ListTickets(repository=DjangoORMTicketRepository())
+        current_page = int(request.query_params.get("current_page", 1))
+        per_page = int(request.query_params.get("per_page", 10))
+
+        use_case = ListTickets(ticket_repository=DjangoORMTicketRepository(), category_repository=DjangoORMCategoryRepository())
         output: ListTicketsResponse = use_case.execute(request=ListTicketsRequest(
             order_by=order_by,
-            current_page=int(request.query_params.get("current_page", 1)),
+            current_page=current_page,
+            per_page=per_page
         ))
         response_serializer = ListTicketsResponseSerializer(output)
 
@@ -64,13 +82,24 @@ class TicketViewSet(viewsets.ViewSet):
             status=HTTP_200_OK,
             data=response_serializer.data,
         )
-
+    """
+        Get Tickets
+    """
+    @swagger_auto_schema(
+        operation_description="Recupera um ticket pelo id",
+        responses={
+            200: RetrieveTicketResponseSerializer,
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def retrieve(self, request: Request, pk: UUID = None) -> Response:
         serializer = RetrieveTicketRequestSerializer(data={"id": pk})
         serializer.is_valid(raise_exception=True)
 
         input = GetTicketRequest(**serializer.validated_data)
-        use_case = GetTicket(repository=DjangoORMTicketRepository())
+        use_case = GetTicket(ticket_repository=DjangoORMTicketRepository(), category_repository=DjangoORMCategoryRepository())
 
         try:
             output = use_case.execute(request=input)
@@ -82,7 +111,32 @@ class TicketViewSet(viewsets.ViewSet):
             status=HTTP_200_OK,
             data=response_serializer.data,
         )
-
+    """
+        Create Ticket
+    """
+    @swagger_auto_schema(
+        operation_description="Cria um ticket passando os atributos obrigatórios",
+        request_body=openapi.Schema(
+            title=("Ticket"),
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title': openapi.Schema(type=openapi.TYPE_STRING, example="Ticket 1"),
+                'user_create': openapi.Schema(type=openapi.TYPE_NUMBER, description=('ID do usuario criador do Ticket'), example=1),
+                'category': openapi.Schema(type=openapi.TYPE_STRING, description=('ID da categoria do Ticket'), example="696868c1-76b5-403b-8774-fa54e9e13123"),
+                'subcategory': openapi.Schema(type=openapi.TYPE_STRING, description=('ID da subcategoria do Ticket'), example="696868c1-76b5-403b-8774-fa54e9e13456"), 
+                'severity': openapi.Schema(type=openapi.TYPE_NUMBER, description=('Severidade do Ticket'), example=1, enum=[1,2,3,4]), 
+                'description': openapi.Schema(type=openapi.TYPE_NUMBER, description=('Descrição do Ticket'), example="Ticket 1 Description"),
+                'user_assigned': openapi.Schema(type=openapi.TYPE_STRING, description=('ID do usuario responsável pelo Ticket'), example=0),
+                'status': openapi.Schema(type=openapi.TYPE_STRING, description=('Status do Ticket'), example="OPEN", enum=['OPEN', 'IN SERVICE', 'COMPLETED', 'CLOSED'])
+            }
+        ),
+        responses={
+            200: RetrieveTicketResponseSerializer,
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def create(self, request: Request) -> Response:
         serializer = CreateTicketRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -104,7 +158,20 @@ class TicketViewSet(viewsets.ViewSet):
             status=HTTP_201_CREATED,
             data=CreateTicketResponseSerializer(output).data,
         )
-
+    
+    """
+        Update Ticket
+    """
+    @swagger_auto_schema(
+        operation_description="Atualiza um ticket passando os atributos obrigatórios",
+        request_body=UpdateTicketRequestSerializer,
+        responses={
+            200: "No Content",
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def update(self, request: Request, pk: UUID = None):
         serializer = UpdateTicketRequestSerializer(data={
             **request.data,
@@ -129,6 +196,20 @@ class TicketViewSet(viewsets.ViewSet):
         
         return Response(status=HTTP_204_NO_CONTENT)
 
+    
+    """
+        Partial Update Ticket
+    """
+    @swagger_auto_schema(
+        operation_description="Atualiza apenas os atributos desejados do ticket",
+        request_body=UpdateTicketRequestSerializer,
+        responses={
+            200: "No Content",
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def partial_update(self, request, pk: UUID = None):
         serializer = UpdateTicketRequestSerializer(data={
             **request.data,
@@ -155,6 +236,19 @@ class TicketViewSet(viewsets.ViewSet):
         
         return Response(status=HTTP_204_NO_CONTENT)
 
+    """
+        Destroy Ticket
+    """
+    @swagger_auto_schema(
+        operation_description="Exclui um ticket",
+        request_body=DeleteTicketRequestSerializer,
+        responses={
+            200: "No Content",
+            400: "Bad Request",
+            401: "Unauthorized",
+            404: "Not Found",
+        }
+    )
     def destroy(self, request: Request, pk: UUID = None):
         request_data = DeleteTicketRequestSerializer(data={"id": pk})
         request_data.is_valid(raise_exception=True)

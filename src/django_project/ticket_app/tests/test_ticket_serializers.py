@@ -9,11 +9,11 @@ class TestCreateTicketRequestSerializer:
                 "title": "Ticket 1",
                 "user_create": 1,
                 "category": "86bedf25-8628-43a3-a73a-2f3ac051648b",
-                "subcategory": None,
+                "subcategory": "86bedf25-8628-43a3-a73a-2f3ac051648b",
                 "severity": 1,
                 "description": "Ticket 1 Desc",
                 "user_assigned": 0,
-                "status": "OPEN"
+                "status": 1
             }
         )
 
@@ -41,13 +41,13 @@ class TestCreateTicketRequestSerializer:
                 "title": "Ticket 1",
                 "user_create": 1,
                 "category": "86bedf25-8628-43a3-a73a-2f3ac051648b",
-                "subcategory": None,
+                "subcategory": "86bedf25-8628-43a3-a73a-2f3ac051648b",
                 "severity": 1,
                 "description": "Ticket 1 Desc",
                 "user_assigned": 0,
-                "status": "OPEN"
+                "status": 1
             },
         )
         assert serializer.is_valid() is True
 
-        assert serializer.validated_data["status"] == "OPEN"
+        assert serializer.validated_data["status"] == 1

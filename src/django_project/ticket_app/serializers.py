@@ -1,12 +1,21 @@
 from rest_framework import serializers
+from django_project._shared import meta_serializer
 
-
+class TicketCategorySerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    name = serializers.CharField(max_length=255)
+    display_name = serializers.CharField(max_length=255)
+    relationship_id = serializers.CharField(allow_blank=True, max_length=40)
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    is_active = serializers.BooleanField()
+    
 class TicketResponseSerializer(serializers.Serializer):
     id=serializers.UUIDField()
     title=serializers.CharField(max_length=100)
     user_create=serializers.IntegerField()
-    category=serializers.UUIDField()
-    subcategory=serializers.UUIDField()
+    category=TicketCategorySerializer()
+    subcategory=TicketCategorySerializer()
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
     created_at=serializers.DateTimeField()
@@ -14,15 +23,10 @@ class TicketResponseSerializer(serializers.Serializer):
     user_assigned=serializers.IntegerField()
     status=serializers.CharField(max_length=40)
 
-class ListOutputMetaSerializer(serializers.Serializer):
-    current_page = serializers.IntegerField()
-    per_page = serializers.IntegerField()
-    total = serializers.IntegerField()
-
 
 class ListTicketsResponseSerializer(serializers.Serializer):
     data = TicketResponseSerializer(many=True)
-    meta = ListOutputMetaSerializer()
+    meta = meta_serializer.ListOutputMetaSerializer()
 
 
 class RetrieveTicketRequestSerializer(serializers.Serializer):
@@ -37,11 +41,11 @@ class CreateTicketRequestSerializer(serializers.Serializer):
     title=serializers.CharField(max_length=100)
     user_create=serializers.IntegerField()
     category=serializers.UUIDField()
-    subcategory=serializers.UUIDField(allow_null=True)
+    subcategory=serializers.UUIDField()
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
     user_assigned=serializers.IntegerField()
-    status=serializers.CharField(max_length=40)
+    status=serializers.IntegerField()
 
 class CreateTicketResponseSerializer(serializers.Serializer):
     id = serializers.UUIDField()
@@ -56,7 +60,7 @@ class UpdateTicketRequestSerializer(serializers.Serializer):
     severity=serializers.IntegerField()
     description=serializers.CharField(max_length=1024)
     user_assigned=serializers.IntegerField()
-    status=serializers.CharField(max_length=40)
+    status=serializers.IntegerField()
 
 class DeleteTicketRequestSerializer(serializers.Serializer):
     id = serializers.UUIDField()

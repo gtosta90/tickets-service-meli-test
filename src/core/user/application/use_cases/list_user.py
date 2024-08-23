@@ -16,6 +16,7 @@ class UserOutput:
 class ListUsersRequest:
     order_by: str = "name"
     current_page: int = 1
+    per_page: int = 10
 
 
 @dataclass
@@ -49,8 +50,8 @@ class ListUsers:
             users,
             key=lambda user: getattr(user, request.order_by),
         )
-        page_offset = (request.current_page - 1) * 2
-        users_page = ordered_users[page_offset:page_offset + 2]
+        page_offset = (request.current_page - 1) * request.per_page
+        users_page = ordered_users[page_offset:page_offset + request.per_page]
 
         return ListUsersResponse(
             data=sorted(
@@ -66,7 +67,7 @@ class ListUsers:
             ),
             meta=ListOutputMeta(
                 current_page=request.current_page,
-                per_page=10,
+                per_page=request.per_page,
                 total=len(users),
             ),
         )

@@ -18,15 +18,22 @@ class TestUpdateCategory:
             relationship_id = "",
             is_active=True
         )
+        subcategory = Category(
+            name="KITS sub",
+            display_name="KITS sub",
+            relationship_id = category.id,
+            is_active=True
+        )
         repository = InMemoryCategoryRepository()
         repository.save(category=category) 
+        repository.save(category=subcategory)
         use_case = UpdateCategory(repository=repository)
 
         request = UpdateCategoryRequest(
             id=category.id,
             name="KITS1",
             display_name="KITS1",
-            relationship_id = category.id,
+            relationship_id = category.relationship_id,
             is_active=False,
         )
         response = use_case.execute(request)

@@ -22,7 +22,7 @@ class UpdateCategory:
     def execute(self, request: UpdateCategoryRequest) -> None:
         notification = Notification()        
         validates = Validates()
-        notification.add_errors(validates.validate_relationship_category(category_id=request.relationship_id, category_repository=self._repository))
+        notification.add_errors(validates.validate_relationship_category(category_id=request.id, relationship_id=request.relationship_id, category_repository=self._repository))
 
         if notification.has_errors:
             raise RelatedEntitiesNotFound(notification.messages)
@@ -54,5 +54,5 @@ class UpdateCategory:
         
         except ValueError as error:
             raise InvalidCategory(error)
-
+        # import ipdb; ipdb.set_trace()
         self._repository.update(category)

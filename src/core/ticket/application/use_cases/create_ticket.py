@@ -22,7 +22,7 @@ class CreateTicketRequest:
     severity: Level
     description: str = ""
     user_assigned: int = 0
-    status: Status = Status.OPEN
+    status: int = 1
 
 @dataclass
 class CreateTicketResponse:
@@ -44,10 +44,13 @@ class CreateTicket:
     def execute(self, request: CreateTicketRequest) -> CreateTicketResponse:
         notification = Notification()
         validates = Validates()
+        # import ipdb; ipdb.set_trace()
         notification.add_errors(validates.validate_user(user_id=request.user_create, user_repository=self._user_repository))
         notification.add_errors(validates.validate_user_assigned(user_id=request.user_assigned, user_repository=self._user_repository))
         notification.add_errors(validates.validate_category(category_id=request.category, category_repository=self._category_repository))
+        notification.add_errors(validates.validate_subcategory(category_id=request.category, subcategory_id=request.subcategory, category_repository=self._category_repository))
 
+        # import ipdb; ipdb.set_trace()
         if notification.has_errors:
             raise RelatedEntitiesNotFound(notification.messages)
         
@@ -57,7 +60,6 @@ class CreateTicket:
             
             if request.user_assigned == "":
                 request.user_assigned = None 
-            
             ticket = Ticket(
                 title=request.title,
                 user_create=request.user_create,
@@ -66,7 +68,7 @@ class CreateTicket:
                 severity=Level(request.severity),
                 description=request.description,
                 user_assigned=request.user_assigned,
-                status=Status(request.status)
+                status=Status(request.status).name
             )
         except ValueError as err:
             raise InvalidTicket(err)

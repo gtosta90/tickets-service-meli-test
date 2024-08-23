@@ -1,5 +1,6 @@
 from typing import Any, Self
 from rest_framework import serializers
+from django_project._shared import meta_serializer
 
 from django_project.category_app.models import Category
 
@@ -21,16 +22,9 @@ class CategoryResponseSerializer(serializers.Serializer):
         fields['subcategories'] = CategoryResponseSerializer(many=True)
         return fields
 
-
-class ListOutputMetaSerializer(serializers.Serializer):
-    current_page = serializers.IntegerField()
-    per_page = serializers.IntegerField()
-    total = serializers.IntegerField()
-
-
 class ListCategoriesResponseSerializer(serializers.Serializer):
     data = CategoryResponseSerializer(many=True)
-    meta = ListOutputMetaSerializer()
+    meta = meta_serializer.ListOutputMetaSerializer()
 
 
 class RetrieveCategoryRequestSerializer(serializers.Serializer):

@@ -1,11 +1,11 @@
 from enum import IntEnum, StrEnum, unique
 
 @unique
-class Status(StrEnum):
-    OPEN = "OPEN"
-    IN_SERVICE = "IN_SERVICE"
-    COMPLETED = "COMPLETED"
-    CLOSED = "CLOSED"
+class Status(IntEnum):
+    OPEN = 1
+    IN_SERVICE = 2
+    COMPLETED = 3
+    CLOSED = 4
 
 @unique
 class Level(IntEnum):

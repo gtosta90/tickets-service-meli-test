@@ -18,7 +18,7 @@ class DjangoORMCategoryRepository(CategoryRepository):
             category_model = self.model.objects.get(id=id)
             return CategoryModelMapper.to_entity(category_model)
         except self.model.DoesNotExist:
-            return None
+            return {}
     
     def list_by_relationship_id(self, id: UUID) -> List[Category]:
         return [CategoryModelMapper.to_entity(category) for category in self.model.objects.all().filter(relationship_id=id)]
@@ -38,7 +38,8 @@ class DjangoORMCategoryRepository(CategoryRepository):
             name=category.name,
             display_name=category.display_name,
             relationship_id=category.relationship_id,
-            is_active=category.is_active
+            is_active=category.is_active,
+            updated_at=category.updated_at
         )
 
 

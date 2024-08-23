@@ -43,17 +43,17 @@ class GetCategory:
             is_active=category.is_active
         )
 
-        _get_subcategories(self.repository, category_response)
+        self._get_subcategories(self.repository, category_response)
 
         return category_response
 
-def _get_subcategories(repo: CategoryRepository, category_resp: GetCategoryResponse):
-    subcategory_list = repo.list_by_relationship_id(category_resp.id)
-    category_resp.subcategories = subcategory_list
+    def _get_subcategories(self, repo: CategoryRepository, category_resp: GetCategoryResponse):
+        subcategory_list = repo.list_by_relationship_id(category_resp.id)
+        category_resp.subcategories = subcategory_list
 
-    if len(subcategory_list) > 0:
-        #itera a lista recursivo
-        for subcategory in subcategory_list:
-            _get_subcategories(repo, subcategory)
-    else:
-        return category_resp
+        if len(subcategory_list) > 0:
+            #itera a lista recursivo
+            for subcategory in subcategory_list:
+                self._get_subcategories(repo, subcategory)
+        else:
+            return category_resp

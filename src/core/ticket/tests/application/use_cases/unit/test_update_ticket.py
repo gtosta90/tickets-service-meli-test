@@ -21,6 +21,14 @@ class TestUpdateTicket:
             name="Teste",
             display_name="Teste"
         )
+    
+    @pytest.fixture
+    def subcategory(self) -> Category:
+        return Category(
+            name="Teste",
+            display_name="Teste",
+            relationship_id=""
+        )
 
     @pytest.fixture
     def user(self) -> User:
@@ -49,9 +57,11 @@ class TestUpdateTicket:
         return repository
     
     @pytest.fixture
-    def category_mock_repository(self, category: Category) -> CategoryRepository:
+    def category_mock_repository(self, category: Category, subcategory: Category) -> CategoryRepository:
         repository = create_autospec(CategoryRepository, instance=True)
+        subcategory.relationship_id = category.id
         repository.list.return_value = [category]
+        repository.get_by_id.return_value = subcategory
         return repository
 
     @pytest.fixture
@@ -67,6 +77,7 @@ class TestUpdateTicket:
         user_mock_repository: UserRepository,
         ticket: Ticket,
         category: Category,
+        subcategory: Category,
         user: User
     ):
         use_case = UpdateTicket(
@@ -81,7 +92,7 @@ class TestUpdateTicket:
             title="Ticket 2",
             description="Ticket 2 Desc",
             category=category.id,
-            subcategory=None,
+            subcategory=subcategory.id,
             severity=Level.MEDIUM,
             user_assigned=user.id,
             status=Status.IN_SERVICE
@@ -90,7 +101,7 @@ class TestUpdateTicket:
         assert ticket.title == "Ticket 2"
         assert ticket.description == "Ticket 2 Desc"
         assert ticket.severity == Level.MEDIUM
-        assert ticket.status == Status.IN_SERVICE
+        assert ticket.status == Status.IN_SERVICE.name
         assert ticket.category == category.id
         assert ticket.user_assigned == 1
 
@@ -104,6 +115,7 @@ class TestUpdateTicket:
         user_mock_repository: UserRepository,
         ticket: Ticket,
         category: Category,
+        subcategory: Category,
         user: User
     ) -> None:
         use_case = UpdateTicket(
@@ -115,7 +127,7 @@ class TestUpdateTicket:
             id=ticket.id,
             title="",
             category=category.id,
-            subcategory=None,
+            subcategory=subcategory.id,
             user_assigned=1
         )
 

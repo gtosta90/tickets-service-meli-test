@@ -97,7 +97,7 @@ class TestCreateAPI:
         self,
         category_repository: DjangoORMCategoryRepository,
     ) -> None:
-        url = reverse("category-list")
+        url = reverse("categories-list")
         data = {
             "name": "KITS",
             "display_name": "KITS",
@@ -121,7 +121,7 @@ class TestUpdateAPI:
     ) -> None:
         category_repository.save(category_1)
 
-        url = reverse("category-detail", kwargs={"pk": category_1.id})
+        url = reverse("categories-detail", kwargs={"pk": category_1.id})
     
         data = {
             "name": "KITS1",
