@@ -16,6 +16,7 @@ Atualização e Exclusão: Permita a modificação e remoção de tickets confor
 Usuários: É possível consultar e listar usuários do sistema através das rotas de users.
 
 # Tecnologias Utilizadas
+
 Python: Linguagem principal.
 
 Django: Framework web que proporciona uma base sólida para a criação de APIs e gerenciamento de dados.
@@ -25,6 +26,9 @@ Django REST Framework: Biblioteca para facilitar a construção de APIs RESTful.
 Pytest: Framework de testes que bibliotecas para a criação de testes untitários e de integração.
 
 PostgreSQL: Sistema de gerenciamento de banco de dados para armazenar e consultar dados dos tickets.
+
+Keycloak: Sistema de autenticação e autorização.
+
 
 # Estrutura do Projeto
 
@@ -97,6 +101,10 @@ AUTH_PUBLIC_KEY=""
 Configure o banco de dados e aplique as migrações:
 
 ```bash
+python manage.py makemigrations
+```
+
+```bash
 python manage.py migrate
 ```
 
@@ -105,18 +113,35 @@ Inicie o servidor:
 ```bash
 python manage.py runserver 0.0.0.0:8000
 ```
+O Docker Compose sobe uma instância de Keycloak local, a mesma não estará configurada na primeira execução, será preciso configurar um realm, criar um user e um client, visite o site do keycloak para obter ajuda: https://www.keycloak.org/getting-started/getting-started-docker
+
+Caso haja uma intância de Keycloak de uso geral em abiente de desenvolvimento basta configurar o parâmetro AUTH_PUBLIC_KEY em sua .env.
 
 As configurações são necessárias apenas na primeira execução. Ao finalizar você terá 3 contêineres rodando o Postgres, Keycloack e a API Tickets-Service.
+
 Os volumes estão mapeados na sua máquina localmente, isso quer dizer que alterações não serão perdidas caso os contêineres sejam destruídos.
+
 Repare que não é necessário instalar o pyhon localmente, a única instalação necessária foi o docker engine, isso se dá pois a aplicação Tickets-Service está com todo seu conteúdo mapeado como volume, isso quer dizer que todas as alterações efetuadas no código serão compartilhadas com o contêiner e você poderá seguir o desenvolvimento sem maiores problemas e garantindo que o ambiente será exatamente o mesmo em todos os contextos da aplicação.       
 
-Uso
+# Ambiente de Produção
+
+A imagem de ambiente produtivo será construída pelo arquivo Dockerfile.prod e executado o deploy via GitHub Actions após commit executado na branch master.
+
+## Monitoramento NewRelic
+
+* Latência no tempo de resposta das rotas;
+* Latência no tempo de resposta do Potgres;
+* Latência no tempo de resposta do serviço de Users -> https://jsonplaceholder.typicode.com/users/;
+* Quantidade de erros;
+* Taxa média de erros;
+
+## Uso
 A API estará disponível em http://localhost:8000. Consulte a documentação da API para explorar os endpoints e obter exemplos de uso.
 
-Documentações:
+## Documentações:
 http://localhost:8000/swagger/
 http://localhost:8000/redoc/
 
 
-Contato
+## Contato
 Para dúvidas e suporte, entre em contato com gabriel.tosta90@gmail.com.
