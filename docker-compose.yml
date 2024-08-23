@@ -1,0 +1,53 @@
+services: 
+  tickets-service:
+    build: 
+      context: ./
+    image: tickets-service-meli-test
+    container_name: tickets-service
+    entrypoint: dockerize -wait tcp://postgres:5432 -timeout 15s bash
+    networks: 
+      - tickets-network
+    volumes: 
+      - ./:/usr/src/tickets-service
+    tty: true
+    ports: 
+      - "8000:8000"
+    depends_on: 
+       - postgres
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    user: root
+    tty: true
+    volumes:
+      - $HOME/.docker_volumes/postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: tickets_db
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    networks: 
+      - tickets-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    container_name: keycloak
+    user: root
+    command: start-dev
+    tty: true
+    ports:
+      - 8085:8080
+    restart: always
+    volumes:
+      - $HOME/.docker_volumes/keycloak_data:/opt/keycloak/data
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    networks: 
+      - tickets-network
+
+networks: 
+  tickets-network:
+    driver: bridge     

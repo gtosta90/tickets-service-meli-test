@@ -1,9 +1,11 @@
 from abc import ABC
+from src import config
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 from uuid import UUID
 from datetime import datetime
 
+from core.category.domain.category import Category
 from src.core.category.domain.category_repository import CategoryRepository
 
 @dataclass
@@ -15,19 +17,19 @@ class CategoryOutput:
     created_at: datetime
     updated_at: datetime
     is_active: bool
-    subcategories: list
+    subcategories: list = None
 
 
 @dataclass
 class ListCategoriesRequest:
     order_by: str = "name"
     current_page: int = 1
-
+    per_page: int = 10
 
 @dataclass
 class ListOutputMeta:
     current_page: int = 1
-    per_page: int = 2
+    per_page: int = 10
     total: int = 0
 
 
@@ -55,8 +57,14 @@ class ListCategories:
             categories,
             key=lambda category: getattr(category, request.order_by),
         )
-        page_offset = (request.current_page - 1) * 2
-        categories_page = ordered_categories[page_offset:page_offset + 2]
+
+        new_ordered_categories = []
+        for category_resp in ordered_categories:
+            self._get_subcategories(self.repository ,category_resp)
+            new_ordered_categories.append(category_resp)
+
+        page_offset = (request.current_page - 1) * request.per_page
+        categories_page = new_ordered_categories[page_offset:page_offset + request.per_page]
 
         return ListCategoriesResponse(
             data=sorted(
@@ -69,14 +77,24 @@ class ListCategories:
                         created_at=category.created_at,
                         updated_at=category.updated_at,
                         is_active=category.is_active,
-                        subcategories=[]
+                        subcategories=category.subcategories
                     ) for category in categories_page
                 ],
                 key=lambda category: getattr(category, request.order_by),
             ),
             meta=ListOutputMeta(
                 current_page=request.current_page,
-                per_page=2,
+                per_page=request.per_page,
                 total=len(categories),
             ),
         )
+    
+    def _get_subcategories(self, repo: CategoryRepository, category_resp: Category):
+        subcategory_list = repo.list_by_relationship_id(category_resp.id)
+        category_resp.subcategories = subcategory_list   
+        if len(subcategory_list) > 0:
+            #itera a lista recursivo
+            for subcategory in subcategory_list:
+                self._get_subcategories(repo, subcategory)        
+        else:
+            return category_resp
