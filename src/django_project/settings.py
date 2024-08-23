@@ -148,3 +148,26 @@ REST_FRAMEWORK = {
 }
 
 APPEND_SLASH=False
+
+LOGGING={
+    'version': 1,
+    'loggers': {
+        'ticket-service':{
+            'handlers':['log'],
+            'level':os.environ.get("LOG_LEVEL")
+        }
+    },
+    'handlers':{
+        'log':{
+            'level': os.environ.get("LOG_LEVEL"),
+            'class': 'logging.StreamHandler',
+            'formatter': 'default'
+        }
+    },
+    'formatters':{
+        'default': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{'
+        }
+    }
+}

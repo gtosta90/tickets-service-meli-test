@@ -1,4 +1,5 @@
 from uuid import UUID
+import logging
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
@@ -35,6 +36,7 @@ from src.django_project.user_app.serializers import (
 
 
 class UserViewSet(viewsets.ViewSet):
+    logger = logging.getLogger('ticket-service')
     permission_classes = [IsAuthenticated]
     """
         List Users
@@ -49,6 +51,7 @@ class UserViewSet(viewsets.ViewSet):
         }
     )
     def list(self, request: Request) -> Response:
+        self.logger.debug(request)
         order_by = request.query_params.get("order_by", "id")
         per_page = int(request.query_params.get("per_page", 10))
         current_page = int(request.query_params.get("current_page", 1))
@@ -78,6 +81,7 @@ class UserViewSet(viewsets.ViewSet):
         }
     )
     def retrieve(self, request: Request, pk: UUID = None) -> Response:
+        self.logger.debug(request)
         serializer = RetrieveUserRequestSerializer(data={"id": pk})
         serializer.is_valid(raise_exception=True)
         # import ipdb; ipdb.set_trace()

@@ -1,4 +1,5 @@
 from uuid import UUID
+import logging
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -49,6 +50,7 @@ from src.django_project.category_app.serializers import (
 )
 
 class CategoryViewSet(viewsets.ViewSet):
+    logger = logging.getLogger('tickets-service')
     """
         List Categories
     """
@@ -107,6 +109,7 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def list(self, request: Request) -> Response:
+        self.logger.debug(request)
         order_by = request.query_params.get("order_by", "id")
         per_page = int(request.query_params.get("per_page", 10))
         current_page = int(request.query_params.get("current_page", 1))
@@ -170,6 +173,7 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def retrieve(self, request: Request, pk: UUID = None) -> Response:
+        self.logger.debug(request)
         serializer = RetrieveCategoryRequestSerializer(data={"id": pk})
         serializer.is_valid(raise_exception=True)
 
@@ -200,6 +204,7 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def create(self, request: Request) -> Response:
+        self.logger.debug(request)
         serializer = CreateCategoryRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -231,6 +236,7 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def update(self, request: Request, pk: UUID = None):
+        self.logger.debug(request)
         serializer = UpdateCategoryRequestSerializer(data={
             **request.data,
             "id": pk,
@@ -264,6 +270,7 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def partial_update(self, request, pk: UUID = None):
+        self.logger.debug(request)
         serializer = UpdateCategoryRequestSerializer(data={
             **request.data,
             "id": pk,
@@ -296,6 +303,7 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def destroy(self, request: Request, pk: UUID = None):
+        self.logger.debug(request)
         request_data = DeleteCategoryRequestSerializer(data={"id": pk})
         request_data.is_valid(raise_exception=True)
 

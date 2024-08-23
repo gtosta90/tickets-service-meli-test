@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
@@ -24,6 +25,7 @@ class GetCategoryResponse:
 
 
 class GetCategory:
+    logger = logging.getLogger('tickets-service')
     def __init__(self, repository: CategoryRepository):
         self.repository = repository
 
@@ -32,19 +34,22 @@ class GetCategory:
 
         if category is None:
             raise CategoryNotFound(f"Category with {request.id} not found")
+        try:
+            category_response = GetCategoryResponse(
+                id=category.id,
+                name=category.name,
+                display_name=category.display_name,
+                relationship_id=category.relationship_id,
+                created_at=category.created_at,
+                updated_at=category.updated_at,
+                is_active=category.is_active
+            )
 
-        category_response = GetCategoryResponse(
-            id=category.id,
-            name=category.name,
-            display_name=category.display_name,
-            relationship_id=category.relationship_id,
-            created_at=category.created_at,
-            updated_at=category.updated_at,
-            is_active=category.is_active
-        )
-
-        self._get_subcategories(self.repository, category_response)
-
+            self._get_subcategories(self.repository, category_response)
+        except ValueError as err:
+            self.logger.error(err)
+            raise ValueError
+        
         return category_response
 
     def _get_subcategories(self, repo: CategoryRepository, category_resp: GetCategoryResponse):

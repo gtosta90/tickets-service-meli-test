@@ -1,4 +1,5 @@
 
+import logging
 from dataclasses import dataclass
 from typing import Set
 from uuid import UUID
@@ -16,6 +17,7 @@ class UpdateCategoryRequest:
     is_active: bool | None = None
 
 class UpdateCategory:
+    logger = logging.getLogger('tickets-service')
     def __init__(self, repository: CategoryRepository):
         self._repository = repository
 
@@ -52,7 +54,8 @@ class UpdateCategory:
 
             category.update_category(name=current_name, display_name=current_display_name)
         
-        except ValueError as error:
-            raise InvalidCategory(error)
+        except ValueError as err:
+            self.logger.error(err)
+            raise InvalidCategory(err)
         # import ipdb; ipdb.set_trace()
         self._repository.update(category)
