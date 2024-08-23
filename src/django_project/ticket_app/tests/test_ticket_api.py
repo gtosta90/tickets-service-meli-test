@@ -18,6 +18,7 @@ def ticket_1():
         title="Ticket 1",
         user_create=1,
         category=uuid4(),
+        subcategory=uuid4(),
         severity=1,
         description="Ticket 1 Desc",
         user_assigned=0,
@@ -31,6 +32,7 @@ def ticket_2():
         title="Ticket 2",
         user_create=1,
         category=uuid4(),
+        subcategory=uuid4(),
         severity=1,
         description="Ticket 2 Desc",
         user_assigned=0,
@@ -58,7 +60,28 @@ class TestListAPI:
         ticket_1: Ticket,
         ticket_2: Ticket,
         ticket_repository: DjangoORMTicketRepository,
+        category_repository: DjangoORMCategoryRepository,
     ) -> None:
+                
+        category = Category(
+            name= "Teste",
+            display_name= "Teste"
+        )
+        subcategory = Category(
+            name= "Teste1",
+            display_name= "Teste1",
+            relationship_id=category.id
+        )
+
+        category_repository.save(category=category)
+        category_repository.save(category=subcategory)
+        
+        ticket_1.category = category.id
+        ticket_1.subcategory = subcategory.id
+        
+        ticket_2.category = category.id
+        ticket_2.subcategory = subcategory.id
+        
         ticket_repository.save(ticket_1)
         ticket_repository.save(ticket_2)
 
@@ -108,19 +131,25 @@ class TestCreateAPI:
             name= "Teste",
             display_name= "Teste"
         )
+        subcategory = Category(
+            name= "Teste1",
+            display_name= "Teste1",
+            relationship_id=category.id
+        )
 
         category_repository.save(category=category)
+        category_repository.save(category=subcategory)
 
-        url = reverse("ticket-list")
+        url = reverse("tickets-list")
         data = {
                     "title": "Ticket 1",
                     "user_create": 1,
                     "category": category.id,
-                    "subcategory": None,
+                    "subcategory": subcategory.id,
                     "severity": 1,
                     "description": "Ticket 1 Desc",
                     "user_assigned": 1,
-                    "status": "OPEN"
+                    "status": 1
             }
         response = APIClient().post(url, data=data)
 
@@ -137,19 +166,25 @@ class TestCreateAPI:
             name= "Teste",
             display_name= "Teste"
         )
+        subcategory = Category(
+            name= "Teste1",
+            display_name= "Teste1",
+            relationship_id=category.id
+        )
 
         category_repository.save(category=category)
+        category_repository.save(category=subcategory)
     
-        url = reverse("ticket-list")
+        url = reverse("tickets-list")
         data = {
                     "title": "Ticket 1",
                     "user_create": 1,
                     "category": category.id,
-                    "subcategory": None,
+                    "subcategory": subcategory.id,
                     "severity": 2,
                     "description": "Ticket 1 Desc",
                     "user_assigned": 0,
-                    "status": "OPEN"
+                    "status": 1
             }
         response = APIClient().post(url, data=data)
 
@@ -165,19 +200,40 @@ class TestUpdateAPI:
         self,
         ticket_1: Ticket,
         ticket_repository: DjangoORMTicketRepository,
+        category_repository: DjangoORMCategoryRepository,
+
     ) -> None:
+        
+        category = Category(
+            name= "Teste",
+            display_name= "Teste"
+        )
+        subcategory = Category(
+            name= "Teste1",
+            display_name= "Teste1",
+            relationship_id=category.id
+        )
+
+        category_repository.save(category=category)
+        category_repository.save(category=subcategory)
+
+        ticket_1.category = category.id
+        ticket_1.subcategory = subcategory.id
+
         ticket_repository.save(ticket_1)
 
-        url = reverse("ticket-detail", kwargs={"pk": ticket_1.id})
+        url = reverse("tickets-detail", kwargs={"pk": ticket_1.id})
     
         data = {
             "title": "Ticket 1",
             "severity": 1,
+            "category": category.id,
+            "subcategory": subcategory.id,
             "description": "Ticket 1 Desc",
             "user_assigned": 0,
-            "status": "IN SERVICE",
+            "status": 2,
         }
-        response = APIClient().patch(url, data=data)
+        response = APIClient().put(url, data=data)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not response.data
@@ -185,4 +241,4 @@ class TestUpdateAPI:
         assert updated_ticket.title == "Ticket 1"
         assert updated_ticket.severity == 1
         assert updated_ticket.description == "Ticket 1 Desc"
-        assert updated_ticket.status == "IN SERVICE"
+        assert updated_ticket.status == "IN_SERVICE"

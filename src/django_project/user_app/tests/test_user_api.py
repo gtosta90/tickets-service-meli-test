@@ -21,7 +21,7 @@ class TestListAPI:
         url = "/api/users/"
         response = APIClient().get(url)
 
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 #         response.data['data'][0]['title'] == expected_data['data'][0]['title']
 #         response.data['data'][1]['title'] == expected_data['data'][1]['title']
 

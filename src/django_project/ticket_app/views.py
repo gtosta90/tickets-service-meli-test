@@ -39,6 +39,7 @@ from src.core.ticket.application.use_cases.list_tickets import (
 )
 from src.core.ticket.application.use_cases.update_ticket import UpdateTicket, UpdateTicketRequest
 from src.django_project.ticket_app.repository import DjangoORMTicketRepository
+from src.django_project.category_app.repository import DjangoORMCategoryRepository
 
 from src.django_project.ticket_app.serializers import (
     CreateTicketRequestSerializer,
@@ -66,10 +67,14 @@ class TicketViewSet(viewsets.ViewSet):
     )
     def list(self, request: Request) -> Response:
         order_by = request.query_params.get("order_by", "title")
-        use_case = ListTickets(repository=DjangoORMTicketRepository())
+        current_page = int(request.query_params.get("current_page", 1))
+        per_page = int(request.query_params.get("per_page", 10))
+
+        use_case = ListTickets(ticket_repository=DjangoORMTicketRepository(), category_repository=DjangoORMCategoryRepository())
         output: ListTicketsResponse = use_case.execute(request=ListTicketsRequest(
             order_by=order_by,
-            current_page=int(request.query_params.get("current_page", 1)),
+            current_page=current_page,
+            per_page=per_page
         ))
         response_serializer = ListTicketsResponseSerializer(output)
 
@@ -94,7 +99,7 @@ class TicketViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         input = GetTicketRequest(**serializer.validated_data)
-        use_case = GetTicket(repository=DjangoORMTicketRepository())
+        use_case = GetTicket(ticket_repository=DjangoORMTicketRepository(), category_repository=DjangoORMCategoryRepository())
 
         try:
             output = use_case.execute(request=input)

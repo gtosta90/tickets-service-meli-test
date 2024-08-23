@@ -107,11 +107,15 @@ class CategoryViewSet(viewsets.ViewSet):
         }
     )
     def list(self, request: Request) -> Response:
-        order_by = request.query_params.get("order_by", "name")
+        order_by = request.query_params.get("order_by", "id")
+        per_page = int(request.query_params.get("per_page", 10))
+        current_page = int(request.query_params.get("current_page", 1))
+        
         use_case = ListCategories(repository=DjangoORMCategoryRepository())
         output: ListCategoriesResponse = use_case.execute(request=ListCategoriesRequest(
             order_by=order_by,
-            current_page=int(request.query_params.get("current_page", 1)),
+            current_page=current_page,
+            per_page=per_page
         ))
         response_serializer = ListCategoriesResponseSerializer(output)
 

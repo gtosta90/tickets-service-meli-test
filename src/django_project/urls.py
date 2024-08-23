@@ -32,9 +32,9 @@ from django_project.user_app.views import UserViewSet
 
 router = DefaultRouter()
 
-router.register(r"api/categories", CategoryViewSet, basename="category")
-router.register(r"api/tickets", TicketViewSet, basename="ticket")
-router.register(r"api/users", UserViewSet, basename="user")
+router.register(r"api/categories", CategoryViewSet, basename="categories")
+router.register(r"api/tickets", TicketViewSet, basename="tickets")
+router.register(r"api/users", UserViewSet, basename="users")
 
 schema_view = get_schema_view(
     openapi.Info(

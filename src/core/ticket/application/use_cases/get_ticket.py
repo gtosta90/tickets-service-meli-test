@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
+from src.core.category.domain.category import Category
 from src.core.ticket.domain.ticket_repository import TicketRepository
+from src.core.category.domain.category_repository import CategoryRepository
 from src.core.ticket.application.use_cases.exceptions import TicketNotFound
 
-from src.core.ticket.domain.ticket import Ticket
 from src.core.ticket.domain.value_objects import Level, Status
 
 @dataclass
@@ -16,8 +17,8 @@ class GetTicketResponse:
     id: UUID
     title: str
     user_create: int
-    category: UUID
-    subcategory: UUID
+    category: Category
+    subcategory: Category
     severity: Level
     description: str
     created_at: datetime
@@ -26,11 +27,13 @@ class GetTicketResponse:
     status: Status
 
 class GetTicket:
-    def __init__(self, repository: TicketRepository):
-        self.repository = repository
+    def __init__(self, ticket_repository: TicketRepository, category_repository: CategoryRepository):
+        self.ticket_repository = ticket_repository
+        self.category_repository = category_repository
 
     def execute(self, request: GetTicketRequest) -> GetTicketResponse:
-        ticket = self.repository.get_by_id(request.id)
+        ticket = self.ticket_repository.get_by_id(request.id)
+        # import ipdb; ipdb.set_trace()
 
         if ticket is None:
             raise TicketNotFound(f"Ticket with {request.id} not found")
@@ -39,8 +42,8 @@ class GetTicket:
             id=ticket.id,
             title=ticket.title,
             user_create=ticket.user_create,
-            category=ticket.category,
-            subcategory=ticket.subcategory,
+            category=self.category_repository.get_by_id(ticket.category),
+            subcategory=self.category_repository.get_by_id(ticket.subcategory),
             severity=ticket.severity,
             description=ticket.description,
             created_at=ticket.created_at,

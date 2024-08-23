@@ -26,7 +26,7 @@ class CreateCategory:
     def execute(self, request: CreateCategoryRequest) -> CreateCategoryResponse:
         notification = Notification()
         validates = Validates()
-        notification.add_errors(validates.validate_relationship_category(category_id=request.relationship_id, category_repository=self._repository))
+        notification.add_errors(validates.validate_relationship_category(category_id=None, relationship_id=request.relationship_id, category_repository=self._repository))
 
         if notification.has_errors:
             raise RelatedEntitiesNotFound(notification.messages)

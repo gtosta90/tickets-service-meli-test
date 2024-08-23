@@ -35,7 +35,8 @@ class DjangoORMTicketRepository(TicketRepository):
             severity=ticket.severity,
             description=ticket.description,
             user_assigned=ticket.user_assigned,
-            status=ticket.status
+            status=ticket.status,
+            updated_at=ticket.updated_at
         )
 
 

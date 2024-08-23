@@ -19,7 +19,7 @@ class UpdateTicketRequest:
     severity: Level | None = None
     description: str | None = None
     user_assigned: int | None = None
-    status: Status | None = None
+    status: int | None = None
 
 class UpdateTicket:
     def __init__(
@@ -38,6 +38,8 @@ class UpdateTicket:
         validates = Validates()
         notification.add_errors(validates.validate_user_assigned(user_id=request.user_assigned, user_repository=self._user_repository))
         notification.add_errors(validates.validate_category(category_id=request.category, category_repository=self._category_repository))
+        notification.add_errors(validates.validate_subcategory(subcategory_id=request.subcategory, category_id=request.category, category_repository=self._category_repository))
+
 
         if notification.has_errors:
             raise RelatedEntitiesNotFound(notification.messages)
@@ -83,7 +85,7 @@ class UpdateTicket:
                 category=current_category,
                 subcategory=current_subcategory,
                 severity=current_severity,
-                status=current_status
+                status=Status(current_status).name
             )
         except ValueError as error:
             raise InvalidTicket(error)
